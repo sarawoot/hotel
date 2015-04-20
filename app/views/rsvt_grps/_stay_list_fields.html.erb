@@ -1,0 +1,63 @@
+<div id="stay-list-fields<%= @gen_t %>_gen_t" class="modal fade" data-backdrop="static">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="closeButtoncloseButton">×</button>
+    <h3><%= "#{t("html.add")} #{t("html.name_list")}" %></h3>
+  </div>
+  <div class="modal-body">
+    <fieldset>
+        
+      <div class="control-group">
+        <%= f.label(:fname, :class => "control-label") %>
+        <div class="controls">
+          <%= f.text_field :fname, class: "field", style: "width:120px;" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label(:lname, :class => "control-label") %>
+        <div class="controls">
+          <%= f.text_field :lname, class: "field", style: "width:120px;" %>
+        </div>
+      </div>
+        
+
+      <div class="control-group">
+        <%= f.label(:abf_rate, :class => "control-label") %>
+        <div class="controls">
+          <%= f.text_field :abf_rate, class: "field", style: "width:120px;" %>
+        </div>
+      </div>
+        
+      <div class="control-group">
+        <%= f.label(:ext_bed_rate, :class => "control-label") %>
+        <div class="controls">
+          <%= f.text_field :ext_bed_rate, class: "field", style: "width:120px;" %>
+        </div>
+      </div>
+               
+      <%= f.hidden_field(:_destroy, :class => "field") %>
+    </fieldset>
+  </div>
+  <div class="modal-footer">
+    <button id="addButton<%= @gen_t %>_gen_t" type="button" class="btn btn-primary" add_person="1"><%= "#{t("html.add")}"%></button>
+    <button id="cancelButton<%= @gen_t %>_gen_t" type="button" class="btn btn-inverse" ><%= "#{t("html.cancel")}"%></button>
+  </div>
+  
+  <script type="text/javascript">  
+    var cfg = {
+      formId: '#stay-list-fields<%= @gen_t %>_gen_t',
+      tableId: '#stay_list_tb<%= @gen_t %>_gen_t',
+      inputFieldClassSelector: '.field',
+      addButton: '#addButton<%= @gen_t %>_gen_t',
+      closeButton: '#closeButton<%= @gen_t %>_gen_t',
+      cancelButton: '#cancelButton<%= @gen_t %>_gen_t',
+    };
+    obj = new rowBuilder(cfg);
+    obj.init();
+    $("input[date_time=1]").datetimepicker({format: "dd/mm/yyyy hh:ii"});
+    $("[add_person=1]").click(function(){
+      add_total_gst();  
+    });
+  </script>  
+  
+</div>
+

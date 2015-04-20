@@ -1,0 +1,21 @@
+<div class="page-header">
+  <h3><%= raw("#{t "activemodel.models.product_place"}") %></h3>
+</div>
+<div class="well" ><%= link_to t("html.add"), new_product_place_path, class: "btn btn-primary"  %></div>
+<center><%= paginate @product_places %></center>
+<table class="table table-hover table-bordered table-striped">
+  <thead>
+    <tr>
+      <th><%= raw("#{t "activemodel.attributes.product_place.name"}") %></th>
+      <th><%= raw("#{t "activemodel.attributes.product_place..used"}") %></th>
+      <th><%= "#{t("html.menu")}"%></th>
+    </tr>
+  </thead>
+<% @product_places.each do |product_place| %>
+  <tr>
+    <td><%= product_place.name %></td>
+    <td><%= used(product_place.used) %></td>
+    <td><%= link_to raw("<i class='icon-edit'></i>#{ t "html.edit"}"), edit_product_place_path(product_place), class: "btn" %></td>
+  </tr>
+<% end %>
+</table>

@@ -1,0 +1,85 @@
+
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require bootstrap-datetimepicker
+ *= require bootstrap-datepicker
+ *= require select2
+ *= require easyui/themes/bootstrap/easyui
+ *= require easyui/themes/icon
+ */
+
+@import "variables";
+@import "bootstrap";
+body { padding-top: 60px; padding-bottom: 40px; }
+@import "bootstrap-responsive";
+
+
+.form-horizontal .control-group {
+    margin-bottom: 5px !important;
+}
+
+.box-header {
+    font-size: 16px;
+    line-height: 16px;
+    border-bottom: 1px solid #A3B1AF;
+    margin-bottom: -1px;
+    padding: 10px;
+    background-color: #999  100%;
+    background-image: -webkit-gradient(linear,left top,left bottom,from( #bbb  0),to( #999  100%));
+    background-image: -webkit-linear-gradient(top, #bbb  0, #999  100%);
+    background-image: -moz-linear-gradient(top, #bbb  0, #999  100%);
+    background-image: -o-linear-gradient(top, #bbb  0, #999  100%);
+    background-image: -ms-linear-gradient(top, #bbb  0, #999  100%);
+    background-image: linear-gradient(top, #bbb  0, #999  100%);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+}
+
+.box-header .break {
+    border-left: 1px solid #EDEDED;
+    border-right: 1px solid #FEFEFE;
+    margin: -12px 10px -10px 10px;
+    padding: 15px 0 30px 0;
+}
+
+.well{
+    border: 1px solid #A3B1AF !important;
+}
+
+.accordion-inner{
+    background-color: #f4f4f4;
+}
+
+.row-top td{
+        border-top:1px solid red;
+        background:#fff;
+}
+.row-bottom td{
+        border-bottom:1px solid red;
+        background:#fff;
+}
+.row-append td{
+        border:0;
+        background:#FBEC88;
+}
+
+.datagrid-ftable {
+  background-color: #a9a9a9;
+}
+
+
+

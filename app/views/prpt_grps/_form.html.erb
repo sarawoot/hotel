@@ -1,0 +1,14 @@
+<%= simple_form_for(@prpt_grp, :html => {:class => 'form-horizontal' }) do |f| %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :used, :wrapper => :append   do %>
+      <%= f.check_box :used, {},'1','0'  %>
+    <% end %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit (@prpt_grp.new_record? ? "#{t "html.save"}"  : "#{t "html.update"}" ), class: "btn btn-primary" %>
+      <%= link_to "#{t "html.back" }", prpt_grps_path, class: "btn" %>
+  </div>
+<% end %>

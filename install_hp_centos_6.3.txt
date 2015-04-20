@@ -1,0 +1,3 @@
+ใช้ copyfile hpvsa-1.2.4-4.rhel6u3.x86_64.dd ใส่ flash Drive และ ให้กด Esc รอ 
+
+Boot: พิม linux dd blacklist=ahci

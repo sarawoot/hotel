@@ -1,0 +1,20 @@
+<div id="print_folio" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel"><%= "#{t("html.print")} #{t("html.folio")}"%></h3>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal" id="form_print_folio">
+      <div class="control-group">
+        <label class="control-label" for="inputEmail"><%= "#{t("html.folio_no")}" %></label>
+        <div class="controls">
+          <select id="folio_select"></select>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><%= "#{t("html.close")}"%></button>
+    <button class="btn btn-primary" id="confirm_print_folio"><%= "#{t("html.confirm")}"%></button>
+  </div>
+</div>

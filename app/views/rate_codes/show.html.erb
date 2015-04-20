@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @rate_code.name %>
+</p>
+
+<p>
+  <b>Used:</b>
+  <%= @rate_code.used %>
+</p>
+
+<p>
+  <b>Room type:</b>
+  <%= @rate_code.room_type_id %>
+</p>
+
+<p>
+  <b>Room rate:</b>
+  <%= @rate_code.room_rate %>
+</p>
+
+<p>
+  <b>Abf rate:</b>
+  <%= @rate_code.abf_rate %>
+</p>
+
+<p>
+  <b>Ext bed rate:</b>
+  <%= @rate_code.ext_bed_rate %>
+</p>
+
+
+<%= link_to 'Edit', edit_rate_code_path(@rate_code) %> |
+<%= link_to 'Back', rate_codes_path %>

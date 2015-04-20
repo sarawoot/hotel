@@ -1,0 +1,25 @@
+<div class="page-header">
+  <h3><%= raw("#{t "activemodel.models.rate_code"}") %></h3>
+</div>
+<div class="well" ><%= link_to t("html.add"), new_rate_code_path, class: "btn btn-primary"  %></div>
+<center><%= paginate @rate_codes %></center>
+<table class="table table-hover table-bordered table-striped">
+  <thead>
+    <tr>
+      <th><%= raw("#{t "activemodel.attributes.rate_code.name"}") %></th>
+      <th><%= raw("#{t "activemodel.attributes.rate_code.used"}") %></th>
+      <th><%= raw("#{t "html.menu"}") %></th>
+    </tr>
+  </thead>
+<tbody>
+<% @rate_codes.each do |rate_code| %>
+  
+    <tr>
+      <td><%= rate_code.name %></td>
+      <td><%= used(rate_code.used) %></td>
+      <td><%= link_to raw("<i class='icon-edit'></i>#{ t "html.edit"}"), edit_rate_code_path(rate_code), class: "btn" %></td>
+    </tr>
+  
+<% end %>
+</tbody>
+</table>

@@ -1,0 +1,145 @@
+<script type="application/x-javascript">
+    var editingId;
+    var toolbar = [{
+        text: "<%= "#{t("html.move")}"%>",
+        iconCls: "icon-move",
+        handler: function(){
+            enableDnd($('#folio'));   
+        }
+    },{
+        text: "<%= "#{t("html.cancel_move")}"%>",
+        iconCls: "icon-nomove",
+        handler: function(){
+            enableDnd($('#folio'),true);   
+        }
+    },{
+        text: "<%= "#{t("html.confirm")}"%>",
+        iconCls: "icon-ok",
+        handler: function(){
+          folio = $("#folio"); 
+            
+          $.ajax({
+              type: "POST",
+              url: "<%= move_folio_path(format: "json" )%>",
+              data: {data: folio.treegrid("getData")},
+              success: function(data){
+                if (data["success"] == true) {
+                  folio.treegrid("reload");
+                  alert("<%= "#{t("html.save_success")}" %>");
+                }
+                else{
+                  alert("<%= "#{t("html.please_do_again")}" %>");
+                }
+              },
+              dataType: 'json'
+          });            
+        }
+    },'-',{
+        text: "<%= "#{t("html.move_room")}"%>",
+        iconCls: "icon-reload",
+      handler: function(){
+        //$("#form_move_room")[0].reset();
+        //$("#charge_product_id").select2("val", "");
+        $("#move_room").modal();
+      }
+    },{
+      text: "<%= "#{t("html.add")} #{t("html.charge")}"%>",
+      iconCls: "icon-add",
+      handler: function(){
+        $("#form_add_charge")[0].reset();
+        $("#charge_product_id").select2("val", "");
+        $("#add_charge").modal();
+      }
+    }
+    <% if is_admin? %>
+    ,{
+      text:'<%= t("html.edit")%> <%= t("html.charge")%>',
+      iconCls:'icon-edit',
+      handler:function(){
+        folio = $("#folio");
+        var row = folio.treegrid('getSelected');
+        if (row == null) {
+            return;
+        }
+        if (row.leaf) {
+            enableDnd(folio,true);
+            $("#form_edit_charge")[0].reset();
+            $("#echarge_product_id").select2("val", row.product_id);
+            $("#echarge_per_unit").val(row.per_unit);
+            $("#echarge_vol").val(row.vol);
+            $("#echarge_price").val(row.price);
+            $("#echarge_room_list_id").val(row.room_list_id);
+            $("#echarge_ref").val(row.ref);
+            $("#echarge_input_type_id").val(row.input_type_id);
+            $("#echarge_expense_id").val(row.expense_id);
+            $("#edit_charge").modal();
+        }
+      }
+    },
+    {
+        text:'<%= t("html.delete")%>',
+        iconCls:'icon-delete',
+        handler:function(){
+            folio = $("#folio");
+            var row = folio.treegrid('getSelected');
+            if (row == null) {
+                return;
+            }
+            if (row.leaf) {
+                var r=confirm("Are you sure");
+                if (!r) {
+                    return;
+                }   
+                $.ajax({
+                    type: "POST",
+                    url: "<%= delete_charge_path(format: "json" )%>",
+                    data:{
+                      expense_id:row.expense_id
+                    },
+                    success: function(data){
+                      if (data["success"] == true) {
+                        folio.treegrid("reload");
+                      }
+                      else{
+                        alert("<%= "#{t("html.please_do_again")}" %>");
+                      }
+                    },
+                    dataType: 'json'
+                });                 
+            }
+        }
+    }
+    <% end %>
+    ,'-',{
+      text: "<%= "#{t("html.add")} #{t("html.folio")}"%>",
+      iconCls: "icon-tip",
+      handler: function(){
+        $("#form_gen_folio")[0].reset();
+        $('#gen_folio').modal();
+      }
+    },
+    "-",{
+        text: "<%= "#{t("html.check_out")}"%>",
+        iconCls: "icon-check_out",
+        handler: function(){
+            $("#check_out").modal();
+        }
+    },'-',{
+        text: "<%= "#{t("html.folio")}" %>",
+        iconCls: "icon-print",
+        handler: function(){
+            
+            $.ajax({
+                type: "POST",
+                url: "<%= option_folio_path(format: "js" )%>",
+                data:{
+                  input_type_id: <%= params[:input_type_id] %>
+                },
+                success: function(data){
+                    $("#print_folio").modal();
+                },
+                dataType: 'script'
+            });
+        }
+    }];
+</script>

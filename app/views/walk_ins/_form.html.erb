@@ -1,0 +1,416 @@
+<% @field_name = @walk_in.type.underscore %>
+<%= simple_form_for(@walk_in, url: url, method: method, :html => {:class => 'form-horizontal' }) do |f| %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="span6">
+        <%= f.input :contact_id %>
+        <%= f.input :tel %>
+        <%= f.input :nation_id, collection: nation_src %>
+        <%= f.input :agent_id, collection: agent_src %>
+        <%= f.input :gst_type_id, collection: gst_type_src %>
+        <%= f.input :gst_level_id, collection: gst_level_src %>
+        <%= f.input :src_gst_id, collection: src_gst_src %>
+        <%= f.input :prpt_grp_id, collection: prpt_grp_src %>
+        <%= f.hidden_field :rsvt_status_id %>
+      </div>
+      <div class="span6">
+        <%= f.input :adult %>
+        <%= f.input :child %>
+        <%= f.input :night %>
+        <%= f.input :arvl_at, :wrapper => :append   do %>
+          <div class="input-append date form_datetime">
+              <%= f.text_field :arvl_at, readonly: true %>
+              <span class="add-on"><i class="icon-remove"></i></span>
+              <span class="add-on"><i class="icon-calendar"></i></span>
+          </div>
+        <% end %>
+        <%= f.input :dpt_at, :wrapper => :append   do %>
+          <div class="input-append date form_datetime">
+              <%= f.text_field :dpt_at, readonly: true  %>
+              <span class="add-on"><i class="icon-remove"></i></span>
+              <span class="add-on"><i class="icon-calendar"></i></span>
+          </div>
+        <% end %>
+        <%= f.input :location %>
+        <%= f.input :rate_code_id, collection: rate_code_src %>
+        
+        <% if @walk_in.expenses.count == 0 %>
+          <% 1.times {@walk_in.expenses.build} %>
+          <%= f.fields_for :expenses do |b| %>
+            <%= b.input :ref %>
+            <%= b.input :product_id, collection: product_payment_src %>
+            <%= b.input :price %>
+            <%= b.input :vol, input_html: {value: '1'}, as: :hidden %>
+          <% end %>
+        <% end %>
+        
+        
+      </div>
+    </div>
+    <br /><br /><%= link_to_add_rooms "#{t("html.add")}#{t("html.room")}", f, :room_lists, "room_reservation" %><br /><br />
+    <center><h4><u><i><%= "#{t("html.total")}" %> <span id="total_gst"></span> <%= "#{t("html.person")}" %></i></u></h4></center>
+    <div id="room_reservation" class="accordion" >
+    <%= f.fields_for :room_lists do |b| %>
+        <%= render 'room_list_fields', f: b %>
+    <% end %>
+    </div>
+    <%= f.input :remark, input_html: {style: "width: 500px;height:80px;"} %>
+  </div>
+  <div class="form-actions">
+    <%= f.submit ("#{t "html.check_in"}" ), class: "btn btn-primary" %>
+    <%= link_to "#{t "html.back" }", check_in_index_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) }), class: "btn" %>
+  </div>
+<% end %>
+<%= content_for :js_footer do %>
+<script type="application/x-javascript">
+  var total_gst = 0;
+  <% if !@walk_in.new_record? %>
+    total_gst = <%= begin StayList.count( conditions: {room_list_id: @walk_in.room_lists.collect{|u| u.id}}) rescue 0 end %>;
+  <% end %>
+  
+  function add_total_gst() {
+    total_gst++;
+    replace();
+  }
+  
+  function remove_total_gst() {
+    total_gst--;
+    replace();
+  }
+  
+  function replace() {
+    $("#total_gst").html(total_gst);
+  }
+  
+  function remove_fields(link) {
+    remove_total_gst();
+    $(link).prev("input[type=hidden]").val("1");
+    $(link).closest(".fields").hide();
+  }  
+  $(function() {
+    
+    total_gst = $("input[id*=_destroy][id*=<%= @field_name %>_room_lists_attributes][id*=stay_lists_attributes][value=false]").length;
+    replace();
+    $(":submit").click(function(){
+      chk = false;
+      sl = $("input[id*=<%= @field_name %>_room_lists_attributes][id*=_destroy][value=false]").not("[id*=stay_list]");
+      arr_tmp = [];
+      for(i=0;i<sl.length;i++){
+        arr_tmp.push($($(sl[i]).closest('table').find("input[id*=room_id][class=select2-offscreen]")[0]).val());
+      }
+      if(_.unique(arr_tmp).length != arr_tmp.length) {
+        chk = true
+      }
+      if (jQuery.grep(arr_tmp, function( n, i ) { return ( n =="" ); }).length > 0) {
+        chk = true
+      }
+      if (total_gst == 0 || total_gst != (Number($("#<%= @field_name %>_adult").val()) + Number($("#<%= @field_name %>_child").val()))  ) {
+        chk = true 
+      }
+      if (chk) {
+        alert("<%= "#{t("html.please_do_again")}" %>");
+        return false;
+      }
+      
+    });
+    
+    $("#<%= @field_name %>_dpt_at").bind('change', function() {
+      if ($("#<%= @field_name %>_arvl_at").val() == "" || $("#<%= @field_name %>_dpt_at").val() == "") {
+        return 0;
+      }
+      arvl_date = $("#<%= @field_name %>_arvl_at").val();
+      dpt_date = $("#<%= @field_name %>_dpt_at").val();
+      arvl_date = arvl_date.split(" ");
+      arvl_date = arvl_date[0].split('/')
+      arvl_date = new Date(arvl_date[2],Number(arvl_date[1]) - 1,arvl_date[0])
+      dpt_date = dpt_date.split(" ");
+      dpt_date = dpt_date[0].split('/')
+      dpt_date = new Date(dpt_date[2],Number(dpt_date[1]) - 1,dpt_date[0])
+      diff = Math.floor((dpt_date.getTime() - arvl_date.getTime()) / 86400000);
+      $("#<%= @field_name %>_night").val(diff)
+    });    
+    
+    $("#<%= @field_name %>_rsvt_status_id").change(function() {
+      change_rsvt_status();
+    }).change();
+    
+    $("#<%= @field_name %>_contact_id").select2({
+      placeholder: "<%= "#{t("html.select")} #{t("html.contact")}" %>",
+      minimumInputLength: 3,
+      allowClear: true,
+      width: 250,
+      ajax: {
+        url: "<%= contacts_path(format: "json") %>",
+        dataType: 'json',
+        quietMillis: 500,
+        data: function (term, page) {
+          return {
+            q: term,
+            page: page,
+            page_limit: 20
+          };
+        },
+        results: function (data, page) {
+          var more = (page * 20) < data.total;
+          return {results: data.data, more: more};
+        }
+      },
+      escapeMarkup: function (m) { return m; },
+      formatResult: function (item, page) {
+        return item.name; 
+      },
+      formatSelection: function (item, page) {
+        return item.name; 
+      },
+    });
+  
+    $(".form_datetime").datetimepicker({
+      format: "dd/mm/yyyy hh:ii",
+      autoclose: true,
+      todayBtn: true,
+      minuteStep: 10
+    });
+    
+    $("#<%= @field_name %>_night,#<%= @field_name %>_arvl_at").bind('change', function() {
+      if ( $("#<%= @field_name %>_night").val() == "" || $("#<%= @field_name %>_arvl_at").val() == "") {
+        return false;
+      }
+      try{
+        dt = $("#<%= @field_name %>_arvl_at").val();
+        dt = dt.split(" ");
+        dt = dt[0].split('/')
+        dt = new Date(dt[2],Number(dt[1]) - 1,dt[0])
+        dt.setDate(dt.getDate() + Number($("#<%= @field_name %>_night").val()))
+        $("#<%= @field_name %>_dpt_at").val( pad(dt.getDate(),2) + "/" + pad(dt.getMonth()+1,2) + "/" + dt.getFullYear() + " 12:00" );
+      }
+      catch(err){
+        return false;
+      } 
+    });
+    
+    $("#<%= @field_name %>_rate_code_id").bind('change', function() {
+      rate_code();
+    });
+    <% if @walk_in.contact_id.to_s != ""
+        contact = Contact.find(@walk_in.contact_id) %>
+        $("#<%= @field_name %>_contact_id").select2("data",{id: <%= contact.id%>, name: "<%= contact.name%>"});
+    <% end %>        
+    update_seq();
+    <% if !@walk_in.new_record? %>
+      <% if @walk_in.contact_id.to_s != ""
+        contact = Contact.find(@walk_in.contact_id) %>    
+          $("#<%= @field_name %>_contact_id").select2("data",{id: <%= contact.id%>, name: "<%= contact.name%>"});
+      <% end %>
+      $.each($("#room_reservation").find("fieldset"),function(index,value){
+        var regexp, time;
+        time = new Date().getTime();
+        regexp = new RegExp("_gen_t", 'g');
+        $.each($("[id*=<%= @field_name %>_room_lists_attributes][id*=room_type_id]"), function(index, value) {
+          room = $(this).closest('fieldset').find("input[id*=room_id]")
+          room.select2("destroy");
+        });
+        htmlstr = $(this).html();
+        $(this).html("");
+        $(this).html(htmlstr.replace(regexp, time));
+      });
+      
+    <% end %>
+  });
+  
+  function change_rsvt_status() {
+    if ($("#<%= @field_name %>_rsvt_status_id").val() == "") {
+      $.each($("[id*=<%= @field_name %>_room_lists_attributes][id*=room_type_id]"), function(index, value) {
+        room = $(this).closest('fieldset').find("input[id*=room_id]")
+        room.select2("enable", false);
+      });
+      return false;
+    }
+    $.ajax({
+      type: "GET",
+      url: "<%= rsvt_statuses_path(format: "json") %>",
+      data: {
+        id: $("#<%= @field_name %>_rsvt_status_id").val()
+      },
+      success: function(data){
+        $.each($("[id*=<%= @field_name %>_room_lists_attributes][id*=room_type_id]"), function(index, value) {
+          room = $(this).closest('fieldset').find("input[id*=room_id]")
+          if (data[0].status != "1" ) {
+            room.select2("destroy");
+            room.val("");
+            room_val = $(this).closest('fieldset').find("input[id*=room_id_old]")[0]
+            room_val = $(room_val).val()
+            room_id = room.attr("id")
+            room_type_id = $(this).attr("id")
+            creat_room_no("#"+room_type_id,"#"+room_id,room_val);              
+            room.select2("enable", false);
+          }
+          else{
+            room.select2("enable", true);
+          }
+        });          
+      },
+      dataType: "json"
+    });
+  }
+  function rate_code() {
+    if ($("#<%= @field_name %>_rate_code_id").val() == "" ) {
+      return false;
+    }
+    $.each($("[id*=<%= @field_name %>_room_lists_attributes][id*=room_type_id]"), function(index, value) {
+      rate_room_type(value);
+    });
+  }
+ 
+  function rate_room_type(el) {
+    if ($("#<%= @field_name %>_rate_code_id").val() == "" || $(el).val() == "") {
+      return false;
+    }
+    $.ajax({
+      type: "GET",
+      url: "<%= rate_codes_path(format: "json") %>",
+      data: {
+        id: $("#<%= @field_name %>_rate_code_id").val(),
+        room_type_id: $(el).val()
+      },
+      success: function(data){
+        
+        
+        $(el).closest('fieldset').find("input[id*=room_rate]").val(data[0].room_rate);
+        $(el).closest('fieldset').find("input[id*=abf_rate]").val(data[0].abf_rate);
+        $(el).closest('fieldset').find("input[id*=ext_bed_rate]").val(data[0].ext_bed_rate);
+      },
+      dataType: "json"
+    });
+  }
+  
+  
+  function set_new_row(el_link,id_div) {
+    rate_form($(el_link).closest('fieldset').find("[id*=room_type_id]")[0],id_div);
+  }
+  
+  function rate_form(el_room_type,id_div) {
+    if ($("#<%= @field_name %>_rate_code_id").val() == "" || $(el_room_type).val() == "") {
+      return false;
+    }
+    $.ajax({
+      type: "GET",
+      url: "<%= rate_codes_path(format: "json") %>",
+      data: {
+        id: $("#<%= @field_name %>_rate_code_id").val(),
+        room_type_id: $(el_room_type).val()
+      },
+      success: function(data){
+        $(id_div+" input[name*=abf_rate]").val(data[0].abf_rate);
+        $(id_div+" input[name*=ext_bed_rate]").val(data[0].ext_bed_rate);
+      },
+      dataType: "json"
+    });
+  }
+  
+  function creat_room_no(room_type,room,room_id) {
+    $(room).select2({
+      placeholder: "<%= "#{t("html.select")} #{t("html.room_no")}" %>",
+      minimumInputLength: 0,
+      allowClear: true,
+      width: 200,
+      ajax: {
+        url: "<%= rooms_path(format: "json") %>",
+        dataType: 'json',
+        quietMillis: 500,
+        data: function (term, page) {
+          return {
+            q: term,
+            page: page,
+            page_limit: 20,
+            room_type_id: $(room_type).val(),
+            dpt_at: $("#<%= @field_name %>_dpt_at").val(),
+            arvl_at: $("#<%= @field_name %>_arvl_at").val(),
+            id: room_id
+          };
+        },
+        results: function (data, page) {
+          rt = $(room_type).val();
+          dpt = $("#<%= @field_name %>_dpt_at").val();
+          arvl = $("#<%= @field_name %>_arvl_at").val();
+          if (rt == "" || dpt == "" || arvl == "") {
+            return {results: [], more: false};
+          }
+          var more = (page * 20) < data.total;
+          return {results: data.data, more: more};
+        }
+      },
+      escapeMarkup: function (m) { return m; },
+      formatResult: function (item, page) {
+        return item.room_no; 
+      },
+      formatSelection: function (item, page) {
+        return item.room_no; 
+      },
+    });
+    if (room_id != "") {
+      $.ajax({
+        type: "GET",
+        url: "<%= room_id_path(format: "json") %>",
+        data: {
+          id: room_id,
+          room_type_id: $(room_type).val()
+        },
+        success: function(data){
+          if (data["id"]) {
+            $(room).select2("data",{id: data["id"], room_no: data["room_no"]});
+          }
+          
+        },
+        dataType: "json"
+      }); 
+    }
+    
+    if ($("#<%= @field_name %>_rsvt_status_id").val() == "") {
+      $(room).select2("enable", false);
+    }
+    else{
+      $.ajax({
+        type: "GET",
+        url: "<%= rsvt_statuses_path(format: "json") %>",
+        data: {
+          id: $("#<%= @field_name %>_rsvt_status_id").val()
+        },
+        success: function(data){
+          if (data[0].status != "1" ) {            
+            $(room).select2("enable", false);
+          }
+          else{
+            $(room).select2("enable", true);
+          }          
+        },
+        dataType: "json"
+      });       
+    }
+  }
+  
+  function update_seq() {
+    i = 1;
+    $.each($("[seq_room=1]"), function(index, value) {
+      if ($(value).closest("fieldset").css("display") == "block") {
+        $(value).html(i)
+        i = i + 1                
+      }
+    });
+  }
+  
+  function add_rooms(link,div) {
+    var regexp, time;
+    time = new Date().getTime();
+    regexp = new RegExp($(link).data('id')+"|"+"_gen_t", 'g');
+    $(div).append($(link).data('fields').replace(regexp, time));
+    update_seq();
+  }
+  
+  function remove_rooms(link) {
+    $(link).prev("input[type=hidden]").val("1");
+    $(link).closest("fieldset").hide();
+    update_seq();
+  }
+  
+</script>
+<% end %>

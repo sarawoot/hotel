@@ -1,0 +1,28 @@
+<div class="page-header">
+  <h3><%= raw("#{t "activemodel.models.shift"}") %></h3>
+</div>
+<div class="well" ><%= link_to t("html.add"), new_shift_path, class: "btn btn-primary"  %></div>
+<center><%= paginate @shifts %></center>
+<table class="table table-hover table-bordered table-striped">
+  <thead>
+    <tr>
+      <th><%= raw("#{t "activemodel.attributes.shift.name"}") %></th>
+      <th><%= raw("#{t "activemodel.attributes.shift..start_at"}") %></th>
+      <th><%= raw("#{t "activemodel.attributes.shift..end_at"}") %></th>
+      <th><%= raw("#{t "html.status"}") %></th>
+      <th><%= "#{t("html.menu")}"%></th>
+    </tr>
+  </thead>
+
+<% @shifts.each do |shift| %>
+  <tbody>
+    <tr>
+      <td><%= shift.name %></td>
+      <td><%= format_time(shift.start_at) %></td>
+      <td><%= format_time(shift.end_at) %></td>
+      <td><%= used(shift.used) %></td>
+      <td><%= link_to raw("<i class='icon-edit'></i>#{ t "html.edit"}"), edit_shift_path(shift), class: "btn" %></td>
+    </tr>
+  </tbody>
+<% end %>
+</table>

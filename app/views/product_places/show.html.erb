@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @product_place.name %>
+</p>
+
+<p>
+  <b>Used:</b>
+  <%= @product_place.used %>
+</p>
+
+<p>
+  <b>Hotel src:</b>
+  <%= @product_place.hotel_src_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_product_place_path(@product_place) %> |
+<%= link_to 'Back', product_places_path %>

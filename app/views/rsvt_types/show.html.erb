@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @rsvt_type.name %>
+</p>
+
+<p>
+  <b>Used:</b>
+  <%= @rsvt_type.used %>
+</p>
+
+
+<%= link_to 'Edit', edit_rsvt_type_path(@rsvt_type) %> |
+<%= link_to 'Back', rsvt_types_path %>

@@ -1,0 +1,23 @@
+<div class="page-header">
+  <h3><%= raw("#{t "activemodel.models.rsvt_status"}") %></h3>
+</div>
+<div class="well" ><%= link_to t("html.add"), new_rsvt_status_path, class: "btn btn-primary"  %></div>
+<center><%= paginate @rsvt_statuses %></center>
+<table class="table table-hover table-bordered table-striped">
+  <thead>
+    <tr>
+      <th><%= raw("#{t "activemodel.attributes.rsvt_status.name"}") %></th>
+      <th><%= raw("#{t "activemodel.attributes.rsvt_status..used"}") %></th>
+      <th>Status</th>
+      <th><%= "#{t("html.menu")}"%></th>
+    </tr>
+  </thead>
+<% @rsvt_statuses.each do |rsvt_status| %>
+  <tr>
+    <td><%= rsvt_status.name %></td>
+    <td><%= used(rsvt_status.used) %></td>
+    <td><%= status_rsvt(rsvt_status.status) %></td>
+    <td><%= link_to raw("<i class='icon-edit'></i>#{ t "html.edit"}"), edit_rsvt_status_path(rsvt_status), class: "btn" %></td>
+  </tr>
+<% end %>
+</table>

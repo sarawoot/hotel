@@ -1,0 +1,182 @@
+<div id="move_room" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel"><%= "#{t("html.move_room")}"%></h3>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal" id="form_move_room">
+        
+        <div class="control-group">
+            <label class="control-label" ><%= "#{t("html.room_no")} #{t("html.old")}" %></label>
+            <div class="controls">
+              <% room_list = RoomList.select("room_lists.id,rooms.room_no")
+                              .joins(:room)
+                              .where( hotel_src_id: current_user.hotel_src_id,
+                                     input_type_id: params[:input_type_id],
+                                     status: "3")%>
+              <%= select "move", "room_old_id", options_for_select(room_list.collect{|u| [u.room_no,u.id]}), prompt: "" %>
+            </div>
+        </div>
+  
+        <div class="control-group">
+            <label class="control-label" ><%= "#{t("html.room_type")}" %></label>
+            <div class="controls">
+                <%= collection_select :move, :room_type_id, room_type_src(false) ,:id, :name, prompt: "" %>   
+            </div>
+        </div>
+  
+        <div class="control-group">
+            <label class="control-label" ><%= "#{t("html.room_no")} #{t("html.new")}" %></label>
+            <div class="controls">
+              <%= text_field :move, :room_new_id %>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" ><%= "#{t("html.room_rate")}" %></label>
+            <div class="controls">
+              <%= text_field :move, :room_rate %>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" ><%= "#{t("html.abf_rate")}" %></label>
+            <div class="controls">
+              <%= text_field :move, :abf_rate %>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" ><%= "#{t("html.ext_bed_rate")}" %></label>
+            <div class="controls">
+              <%= text_field :move, :ext_bed_rate %>
+            </div>
+        </div>        
+      
+        <div class="control-group">
+            <label class="control-label" ><%= "#{t("html.remark")}" %></label>
+            <div class="controls">
+                <%= text_field "move", "remark" %>
+            </div>
+        </div> 
+        <input type="hidden" value="<%= params[:input_type_id]%>" name="move[input_type_id]" />
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><%= "#{t("html.close")}"%></button>
+    <button class="btn btn-primary" id="confirm_move_room" ><%= "#{t("html.confirm")}"%></button>
+  </div>
+</div>
+
+
+<% input_tmp = InputType.find(params[:input_type_id]) %>
+<%= content_for :js_footer do %>
+<script type="application/x-javascript">
+  function sel2_room_move(){
+    $("#move_room_new_id").select2({
+      placeholder: "<%= "#{t("html.select")} #{t("html.room_no")}" %>",
+      minimumInputLength: 0,
+      allowClear: true,
+      ajax: {
+        url: "<%= rooms_path(format: "json") %>",
+        dataType: 'json',
+        quietMillis: 500,
+        data: function (term, page) {
+          return {
+            q: term,
+            page: page,
+            page_limit: 20,
+            room_type_id: $("#move_room_type_id").val(),
+            dpt_at: '<%= datetime_datetimeform(input_tmp.dpt_at) %>',
+            arvl_at: '<%= datetime_datetimeform(input_tmp.arvl_at) %>',
+            id: ""
+          };
+        },
+        results: function (data, page) {
+          var more = (page * 20) < data.total;
+          return {results: data.data, more: more};
+        }
+      },
+      escapeMarkup: function (m) { return m; },
+      formatResult: function (item, page) {
+        return item.room_no; 
+      },
+      formatSelection: function (item, page) {
+        return item.room_no; 
+      },
+    });    
+  }
+  $(function() {
+    sel2_room_move();
+    $("#move_room_type_id").change(function(){
+      $("#move_room_rate").val("");
+      $("#move_abf_rate").val("");
+      $("#move_ext_bed_rate").val("");
+      $("#move_remark").val("");
+      
+      val = $("#move_room_type_id :selected").val();
+      if (val == "") {
+        $("#move_room_new_id").select2("destroy");
+        $("#move_room_new_id").val("");
+        sel2_room_move();
+        $("#move_room_new_id").select2("enable",false);
+      }
+      else{
+        $("#move_room_new_id").select2("enable",true);
+        $.ajax({
+          type: "GET",
+          url: "<%= rate_codes_path(format: "json") %>",
+          data: {
+            id: <%= input_tmp.rate_code_id %>,
+            room_type_id: val
+          },
+          success: function(data){
+            $("#move_room_rate").val(data[0].room_rate);
+            $("#move_abf_rate").val(data[0].abf_rate);
+            $("#move_ext_bed_rate").val(data[0].ext_bed_rate);
+          },
+          dataType: "json"
+        });
+      }
+      
+      
+      
+    }).change();
+    
+    $('#move_room').on('hidden', function () {
+      $("#move_room_new_id").select2("destroy");
+      $("#form_move_room")[0].reset();
+      sel2_room_move();
+      $("#move_room_new_id").select2("enable",false);
+    });
+    $("#confirm_move_room").click(function(){
+      ro = $("#move_room_old_id :selected").val();
+      rt = $("#move_room_type_id :selected").val();
+      rn = $("#move_room_new_id").val();
+      rr = $("#move_room_rate").val();
+      ra = $("#move_abf_rate").val();
+      rb = $("#move_ext_bed_rate").val();
+      if (ro == "" || rt == "" || rn == "" ||  rr == "") {
+        alert("<%= "#{t("html.please_do_again")}" %>");
+        return 0;
+      }
+      $.ajax({
+        type: "POST",
+        url: "<%= move_room_path(format: "json" )%>",
+        data: $('#form_move_room').serialize(),
+        success: function(data){
+          if (data["success"] == true) {
+            alert("<%= "#{t("html.save_success")}" %>");
+            window.location = "<%= check_out_path(input_type_id: params[:input_type_id])%>"
+          }
+          else{
+            alert("<%= "#{t("html.please_do_again")}" %>");
+          }
+        },
+        dataType: 'json'
+      });      
+    });
+    
+  });
+</script>
+<% end %>

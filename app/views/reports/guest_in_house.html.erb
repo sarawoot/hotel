@@ -1,0 +1,53 @@
+<div class="page-header">
+  <h3> Guest in House</h3>
+</div>
+<div class="row">
+  <div class="span4 offset4 well" style="padding: 0;" >
+    <div style="margin: 20px;">
+      <form method="get" class="form-horizontal" target="_blank">
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.start_at")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_start_at" name="search[start_at]" value="<%= begin params[:search][:start_at] rescue "" end %>" >            
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.end_at")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_end_at" name="search[end_at]" value="<%= begin params[:search][:end_at] rescue "" end %>" >            
+          </div>
+        </div>
+        
+        
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.report_type")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= select :search, :report_type,
+              options_for_select([["Cashier",1],["Housekeeping",2]],
+                                 begin params[:search][:report_type] rescue "" end)  %>
+          </div>
+        </div> 
+          
+        <div class="form-actions">
+          <%= button_tag "#{t "html.ok"}", class: "btn btn-primary", id: "submit_report" %>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<%= content_for :js_footer do %>
+<script>
+  $(function(){
+    $('#search_start_at').datepicker({
+      format: 'dd/mm/yyyy'
+    });
+    
+    $('#search_end_at').datepicker({
+      format: 'dd/mm/yyyy'
+    });
+  });
+</script>
+<% end %>

@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="span5 offset3 well">
+    <%= form_tag sessions_path, class: "form-horizontal" do %>
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Username</label>
+        <div class="controls">
+          <%= text_field_tag :login, params[:login], placeholder: "Username"  %>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Passsword</label>
+        <div class="controls">
+          <%= password_field_tag :password, nil, placeholder: "Passsword" %>
+        </div>
+      </div>  
+      <div class="control-group">
+        <div class="controls">
+          <%= submit_tag "Login", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

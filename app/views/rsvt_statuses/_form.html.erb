@@ -1,0 +1,18 @@
+<%= simple_form_for(@rsvt_status, :html => {:class => 'form-horizontal' }) do |f| %>
+
+  <div class="form-inputs">
+    <%= f.input :used, :wrapper => :append   do %>
+      <%= f.check_box :used, {},'1','0'  %>
+    <% end %>
+    <%= f.input :name %>
+    
+    <%= f.input :status, collection: arr_status_rsvt %>
+    
+    
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit (@rsvt_status.new_record? ? "#{t "html.save"}"  : "#{t "html.update"}" ), class: "btn btn-primary" %>
+      <%= link_to "#{t "html.back" }", rsvt_statuses_path, class: "btn" %>
+  </div>
+<% end %>

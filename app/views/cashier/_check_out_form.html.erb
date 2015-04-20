@@ -1,0 +1,34 @@
+<div id="check_out" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel"><%= "#{t("html.check_out")}"%></h3>
+  </div>
+  <%= form_for @input_type,url: check_out_room_path(id: @input_type.id) do |f| %>
+  <div class="modal-body">
+    
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th><%= "#{t("html.check_out")}"%></th>
+            <th><%= "#{t("html.room_no")}"%></th>
+          </tr>
+        </thead>
+        <tbody>
+        <%= f.fields_for :room_lists do |b| %>
+          <% if  b.object.status == '3'%>
+            <tr>
+              <td><%= b.check_box :status, {},'4','3'  %></td>
+              <td><%= begin b.object.room.room_no rescue "" end %></td>
+            </tr>
+          <% end %>
+        <% end %>
+        </tbody>
+      </table>
+    
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><%= "#{t("html.close")}"%></button>
+    <input type="submit" value="<%= "#{t("html.confirm")}"%>" class="btn btn-primary" >
+  </div>
+  <% end %>
+</div>

@@ -1,0 +1,56 @@
+<div id="new-rate-fields" class="modal fade" data-backdrop="static">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="closeButton">×</button>
+    <h3><%= "#{t("html.add")} #{t("activemodel.models.rate_code")}" %></h3>
+  </div>
+  <div class="modal-body">
+    <fieldset>
+      <div class="control-group">
+        <%= f.label(:room_type_id, :class => "control-label") %>
+        <div class="controls">
+          <%= f.collection_select :room_type_id, room_type_src(false),:id,:name, {prompt: ""}, {class: "field"} %>
+        </div>
+      </div>
+        
+      <div class="control-group">
+        <%= f.label(:room_rate, :class => "control-label") %>
+        <div class="controls">
+          <%= f.number_field :room_rate, class: "field" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label(:abf_rate, :class => "control-label") %>
+        <div class="controls">
+          <%= f.number_field :abf_rate, class: "field" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label(:ext_bed_rate, :class => "control-label") %>
+        <div class="controls">
+          <%= f.number_field :ext_bed_rate, :class => "field" %>
+        </div>
+      </div>
+      
+      <%= f.hidden_field(:_destroy, :class => "field") %>
+    </fieldset>
+  </div>
+  <div class="modal-footer">
+    <button id="addButton" type="button" class="btn btn-primary" ><%= "#{t("html.add")}"%></button>
+    <button id="cancelButton" type="button" class="btn btn-inverse" id="cancelButton"><%= "#{t("html.cancel")}"%></button>
+  </div>
+  
+  <script type="text/javascript">  
+    var cfg = {
+      formId: '#new-rate-fields',
+      tableId: '#rate_datail_tb',
+      inputFieldClassSelector: '.field',
+      addButton: '#addButton',
+      closeButton: '#closeButton',
+      cancelButton: '#cancelButton',
+    };
+    obj = new rowBuilder(cfg);
+    obj.init();
+  </script>  
+  
+</div>
+

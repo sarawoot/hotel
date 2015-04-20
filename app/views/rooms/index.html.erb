@@ -1,0 +1,53 @@
+<div class="page-header">
+  <h3><%= raw("#{t "activemodel.models.room"}") %></h3>
+</div>
+<div class="well" >
+  <div style="float: left"><%= link_to t("html.add"), new_room_path, class: "btn btn-primary"  %></div>
+  <div style="float: right">
+    <form method="get">
+      <%= collection_select(:search, :floor_id, floor_src(false), :id, :name, prompt: "", selected: begin params[:search][:floor_id] rescue "" end ) %>
+    </form>
+  </div>
+  <div style="clear: both;"></div>
+</div>
+<center><%= paginate @rooms %></center>
+<table class="table table-hover table-bordered table-striped">
+  <thead>
+    <tr>
+      <th><%= raw("#{t "activemodel.attributes.room.floor_id"}") %></th>      
+      <th><%= raw("#{t "activemodel.attributes.room.seq"}") %></th>      
+      <th><%= raw("#{t "activemodel.attributes.room.room_no"}") %></th>      
+      <th><%= raw("#{t "activemodel.attributes.room.room_type_id"}") %></th>      
+      <th><%= raw("#{t "activemodel.attributes.room.used"}") %></th>      
+      <th><%= raw("#{t "activemodel.attributes.room.status"}") %></th>      
+      <th><%= "#{t("html.menu")}"%></th>
+    </tr>
+  </thead>
+
+<% @rooms.each do |room| %>
+  <tr>
+    <td><%= begin room.floor.name rescue "" end %></td>
+    <td><%= room.seq %></td>
+    <td><%= room.room_no %></td>
+    <td><%= begin room.room_type.name rescue "" end %></td>
+    <td><%= used(room.used) %></td>
+    <td><%= status_room(room.status) %></td>
+    <td><%= link_to raw("<i class='icon-edit'></i>#{ t "html.edit"}"), edit_room_path(room), class: "btn" %></td>
+  </tr>
+<% end %>
+</table>
+
+<script>
+  $(function(){
+    $("#search_floor_id").change(function(){
+      $(this).closest("form").submit();
+    });
+    
+    
+  });
+  
+</script>
+
+<br />
+
+

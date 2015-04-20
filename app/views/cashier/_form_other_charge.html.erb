@@ -1,0 +1,115 @@
+<%= simple_form_for @folio, url: url, method: :post, :html => {:class => 'form-horizontal' } do |f| %>
+  <%= f.input :remark %>
+  <% field_id = f.object_name.gsub(/(\])?\[/, "_").chop %>
+  <%= link_to_add_tables("#{t("html.add")}", f, :expenses,
+                                 "tb_product_#{field_id}",
+                                 :class => "btn btn-primary") %><br/><br/>
+  <table class="table table-striped table-bordered table-hover" style="margin-bottom: 0;">
+    <thead>
+      <tr>
+        <th><%=raw "#{t "activemodel.attributes.product.name"}" %></th>
+        <th><%=raw "#{t "activemodel.attributes.product.vol"}" %></th>
+        <th><%=raw "#{t "activemodel.attributes.product.per_unit"}" %></th>
+        <th><%=raw "#{t "activemodel.attributes.product.price"}" %></th>
+        <th><%= "#{t("html.menu")}"%></th>
+      </tr>
+    </thead>
+    <tbody id="<%= "tb_product_#{field_id}" %>">
+    <%= f.fields_for :expenses do |ep| %>
+      <%= render "expense_fields", f: ep %>
+    <% end %>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="span3 offset9">
+      <div class="well" style="margin: 0;padding: 0">
+        <table class="table">
+          <tr>
+            <td><b><%= "#{t("html.amount")}" %>:</b></td>
+            <td align="right"><b id="tb_amount"></b></td>
+          </tr>
+          <tr>
+            <td><b><%= "#{t("html.payment")}" %>:</b></td>
+            <td align="right"><b id="tb_payment"></b></td>
+          </tr>
+          <tr>
+            <td><b><%= "#{t("html.remain")}" %>:</b></td>
+            <td align="right"><b id="tb_remain"></b></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form-actions">
+    <%= f.submit (@folio.new_record? ? "#{t "html.save"}"  : "#{t "html.update"}" ), class: "btn btn-primary" %>
+    <%= link_to "#{t "html.back" }", other_charge_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) }), class: "btn" %>
+  </div>
+  
+  <%= content_for :js_footer do %>
+  <script >
+    function set_product(product) {
+      product.select2();
+      product.change(function(){
+        if (product.val() != ""){
+          $.ajax({
+            type: "GET",
+            url: "<%= product_id_path(format: "json" )%>",
+            data: {
+              id: product.val() 
+            },
+            success: function(data){
+              product.closest("tr").find("input[id*=price]").val(data.price);
+              product.closest("tr").find("input[id*=vol]").val('1');
+              product.closest("tr").find("input[id*=per_unit]").val(data.price);
+              product.closest("tr").find("input[id*=config]").val(data.config);
+              summary_charge();
+            },
+            dataType: 'json'
+        });
+        }  
+      });
+    }
+    
+    function set_price(price,vol,per_unit) {
+      $(vol+","+per_unit).change(function(){
+        $(price).val( Number($(vol).val()) * Number($(per_unit).val()) );
+        summary_charge();
+      });
+    }
+    
+    function summary_charge() {
+      
+      amount = 0.0;
+      payment = 0.0;
+      remain = 0.0;
+      id_tb = "#<%= "tb_product_#{field_id}" %>";
+      $.each($(id_tb).find("tr"), function(key, value){
+        if ($(value).css("display") != "none"){
+          if ($(value).find("input[id*=config]").val() == '4') {
+            payment += (Math.abs(Number($(value).find("input[id*=price]").val()))*-1)*-1;
+          }
+          else{          
+            amount += Number($(value).find("input[id*=price]").val());
+          }
+        }
+      });
+      
+      remain = amount - payment ;
+      $("#tb_amount").html(amount);
+      $("#tb_payment").html(payment);
+      $("#tb_remain").html(remain);
+    }
+    
+    <% if !@folio.new_record? %>
+      $(function(){
+        summary_charge();  
+      });
+    <% end %>
+    
+  </script>
+  
+  <% end %>    
+  
+<% end %>
+

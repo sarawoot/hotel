@@ -1,0 +1,53 @@
+<% @gen_t = Time.now.to_i %>
+
+<fieldset>
+  <div class="accordion-group">
+    <div class="accordion-heading  box-header">
+      <span style="line-height: 30px;" ><b seq_room=1 style="color: white"></b></span><span class="break"></span>
+      <div style="float: right">
+      <table>
+        <tr>
+          <td><%= f.collection_select :room_type_id, room_type_src(false) ,:id, :name, prompt: "" %></td>
+          <td><%= f.text_field :room_id %></td>
+          <td>
+            <input type="hidden" id="<%= "#{f.object_name}".gsub(/(\])?\[/, "_").chop %>_room_id_old" value="<%=  f.object.room_id.to_s %>" >
+            <%= f.text_field :room_rate, placeholder: "#{t("html.room_rate")}" %>              
+          </td>
+          <td><%= link_to_remove_rooms("#{t("html.delete")}#{t("html.room")}".html_safe, f) %></td>
+          <td><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion<%= @gen_t %>_gen_t" href="#collapse<%= @gen_t %>_gen_t"><i class="icon-chevron-down"></i></a></td>
+        </tr>
+      </table>
+      </div>
+      <div style="clear:  both"></div>
+    </div>
+    <div id="collapse<%= @gen_t %>_gen_t" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <div style="float: left"><%= link_to_add_fields("#{t("html.add")}", f, :stay_lists, "stay-list-fields#{@gen_t}_gen_t", {:class => "btn"}, "set_new_row(this,\"#stay-list-fields#{@gen_t}_gen_t\")") %><br /><br /></div>
+        <div style="clear: both"</div>
+        <%= render('tb_stay_list', :f => f) %>
+        <script>
+          $(function() {
+            creat_room_no("#<%= "#{f.object_name}[room_type_id]".gsub(/(\])?\[/, "_").chop %>",
+                          "#<%= "#{f.object_name}[room_id]".gsub(/(\])?\[/, "_").chop %>","<%=  f.object.room_id.to_s %>");
+            $("[id*=<%= @field_name %>_room_lists_attributes][id*=room_type_id]").bind('change', function() {
+              $(this).closest('fieldset').find("input[id*=room_id]").select2("destroy");
+              room_type = $(this).attr("id");
+              room = $(this).closest('fieldset').find("input[id*=room_id]")[0];
+              $(room).val("");
+              room = $(room).attr("id");
+              room_id = $(this).closest('fieldset').find("input[id*=room_id_old]")[0];
+              room_id = $(room_id).val();
+              creat_room_no("#"+room_type,"#"+room,room_id);
+              rate_room_type(this);
+            });
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+</fieldset>
+
+
+
+
+

@@ -1,0 +1,22 @@
+<table class="table table-hover table-bordered" id="rate_datail_tb">
+  <thead>
+    <th><%= raw(t("activemodel.attributes.rate_code_detail.room_type_id"))%></th>
+    <th><%= raw(t("activemodel.attributes.rate_code_detail.room_rate"))%></th>
+    <th><%= raw(t("activemodel.attributes.rate_code_detail.abf_rate"))%></th>
+    <th><%= raw(t("activemodel.attributes.rate_code_detail.ext_bed_rate"))%></th>
+  </thead>
+  </thead>
+  <tbody>
+  <%= f.simple_fields_for  :rate_code_details do |b| %>
+    <tr class="fields">
+      <td><%= b.collection_select :room_type_id, room_type_src(false),:id,:name, {prompt: ""} %></td>
+      <td><%= b.number_field :room_rate %></td>
+      <td><%= b.number_field :abf_rate %></td>
+      <td><%= b.number_field :ext_bed_rate %></td>
+      <td><%= link_to_remove_fields('<i class="icon-remove"></i>'.html_safe, b) %></td>
+    </tr>
+  <% end %>
+  </tbody>  
+</table>
+    
+    

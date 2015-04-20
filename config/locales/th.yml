@@ -1,0 +1,464 @@
+th:
+  date:
+    abbr_day_names:
+    - อา
+    - จ
+    - อ
+    - พ
+    - พฤ
+    - ศ
+    - ส
+    abbr_month_names:
+    - 
+    - ม.ค.
+    - ก.พ.
+    - มี.ค.
+    - เม.ย.
+    - พ.ค.
+    - มิ.ย.
+    - ก.ค.
+    - ส.ค.
+    - ก.ย.
+    - ต.ค.
+    - พ.ย.
+    - ธ.ค.
+    day_names:
+    - อาทิตย์
+    - จันทร์
+    - อังคาร
+    - พุธ
+    - พฤหัสบดี
+    - ศุกร์
+    - เสาร์
+    formats:
+      default: ! '%d-%m-%Y'
+      long: ! '%d %B %Y'
+      short: ! '%d %b'
+    month_names:
+    - 
+    - มกราคม
+    - กุมภาพันธ์
+    - มีนาคม
+    - เมษายน
+    - พฤษภาคม
+    - มิถุนายน
+    - กรกฎาคม
+    - สิงหาคม
+    - กันยายน
+    - ตุลาคม
+    - พฤศจิกายน
+    - ธันวาคม
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours: ประมาณ %{count} ชั่วโมง
+      about_x_months: ประมาณ %{count} เดือน
+      about_x_years: ประมาณ %{count} ปี
+      almost_x_years: เกือบ %{count} ปี
+      half_a_minute: ครึ่งนาที
+      less_than_x_minutes: น้อยกว่า %{count} นาที
+      less_than_x_seconds: น้อยกว่า %{count} วินาที
+      over_x_years: มากกว่า %{count} ปี
+      x_days: ! '%{count} วัน'
+      x_minutes: ! '%{count} นาที'
+      x_months: ! '%{count} เดือน'
+      x_seconds: ! '%{count} วินาที'
+    prompts:
+      day: วัน
+      hour: ชั่วโมง
+      minute: นาที
+      month: เดือน
+      second: วินาที
+      year: ปี
+
+  helpers:
+    select:
+      prompt: โปรดเลือก
+    submit:
+      create: สร้าง%{model}
+      submit: บันทึก%{model}
+      update: ปรับปรุง%{model}
+  number:
+    currency:
+      format:
+        delimiter: ! ','
+        format: ! '%n %u'
+        precision: 2
+        separator: .
+        significant: false
+        strip_insignificant_zeros: false
+        unit: บาท
+    format:
+      delimiter: ! ','
+      precision: 3
+      separator: .
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: ! '%n %u'
+        units:
+          billion: พันล้าน
+          million: ล้าน
+          quadrillion: พันล้านล้าน
+          thousand: พัน
+          trillion: ล้านล้าน
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: ! '%n %u'
+        units:
+          byte: ไบต์
+          gb: จิกะไบต์
+          kb: กิโลไบต์
+          mb: เมกะไบต์
+          tb: เทระไบต์
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ! ', และ '
+      two_words_connector: ! ' และ '
+      words_connector: ! ', '
+  time:
+    am: ก่อนเที่ยง
+    formats:
+      default: ! '%a %d %b %Y %H:%M'
+      long: ! '%d %B %Y %H:%M น.'
+      short: ! '%d %b %H:%M น.'
+    pm: หลังเที่ยง
+  #---------------------------------------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------------------------------------
+  # my custom
+  errors: &errors
+    format: ! '%{attribute} %{message}'
+    messages:
+      accepted: ต้องถูกยอมรับ
+      blank: ต้องไม่เว้นว่างเอาไว้
+      confirmation: ไม่ตรงกับการยืนยัน
+      empty: ต้องไม่เว้นว่างเอาไว้
+      equal_to: ต้องมีค่าเท่ากับ %{count}
+      even: ต้องเป็นจำนวนคู่
+      exclusion: ไม่ได้รับอนุญาตให้ใช้
+      greater_than: ต้องมากกว่า %{count}
+      greater_than_or_equal_to: ต้องมากกว่าหรือเท่ากับ %{count}
+      inclusion: ไม่ได้อยู่ในรายการ
+      invalid: ไม่ถูกต้อง
+      less_than: ต้องมีค่าน้อยกว่า %{count}
+      less_than_or_equal_to: ต้องมีค่าน้อยกว่าหรือเท่ากับ %{count}
+      not_a_number: ไม่ใช่ตัวเลข
+      not_an_integer: ไม่ใช่จำนวนเต็ม
+      odd: ต้องเป็นจำนวนคี่
+      record_invalid: ! 'ไม่ผ่านการตรวจสอบ: %{errors}'
+      taken: ถูกใช้ไปแล้ว
+      too_long: ยาวเกินไป (ต้องไม่เกิน %{count} ตัวอักษร)
+      too_short: สั้นเกินไป (ต้องยาวกว่า %{count} ตัวอักษร)
+      wrong_length: มีความยาวไม่ถูกต้อง (ต้องมีความยาว %{count} ตัวอักษร)
+    template:
+      body: ! 'โปรดตรวจสอบข้อมูลในช่องต่อไปนี้:'
+      header: พบข้อผิดพลาด %{count} ประการ ทำให้ไม่สามารถบันทึก%{model}ได้
+    models:
+      user:
+        attributes:
+          username:
+            invalid: "ควรประกอบด้วย ตัวอักษรภาษาอักฤษ, ตัวเลข, หรือ  .-_@"
+            
+  model: &model
+    models:
+      user: ผู้ใช้งาน
+      agent: ตัวแทน
+      floor: ชั้น
+      gst_level: ระดับความสำคัญของแขก
+      gst_type: ประเภทของแขก
+      nation: สัญชาติ
+      paid: การจ่ายเงิน
+      prpt_grp: ลักษณะของ Group
+      rate_code: Rate Code
+      room_type: ชนิดของห้อง
+      room: ห้องพัก
+      rsvt_status: สถานะการจอง
+      rsvt_type: วิธีการจอง
+      shift: รอบการทำงาน
+      src_gst: แหล่งที่มาของแขก
+      contact: ผู้ติดต่อ
+      product: สินค้า/บริการ
+      product_place: กลุ่มสินค้า/บริการ
+    attributes:
+      folio:
+        remark: หมายเหตุ
+      user:
+        email: อีเมล
+        fname: ชื่อ
+        lname: นามสกุล
+        username: "ชื่อผู้ใช้งาน"
+        password: รหัสผ่าน
+        password_confirmation: ยืนยันรหัสผ่าน
+        lang: "ภาษา"
+        roll: สิทธิการใช้งาน
+      agent:
+        name: ชื่อ Agent
+        used: สถานะการใช้งาน
+      floor:
+        name: ชั้น
+        used: สถานะการใช้งาน
+        seq: ลำดับ
+      gst_level: 
+        name: ระดับของแขก
+        used: สถานะการใช้งาน
+      gst_type: 
+        name: ประเภทของแขก
+        used: สถานะการใช้งาน
+      nation: 
+        name: สัญชาติ
+        used: สถานะการใช้งาน
+      paid:
+        name: การจ่ายเงิน
+        used: สถานะการใช้งาน
+      prpt_grp:
+        name: ลักษณะของ Group
+        used: สถานะการใช้งาน
+      rate_code:
+          name: Rate Code
+          used: สถานะการใช้งาน
+      rate_code_detail:
+          room_type_id: ประเภทห้อง
+          room_rate: ราคาห้องพัก
+          abf_rate: ราคาอาหารเช้า
+          ext_bed_rate: ราคาเตียงพิเศษ
+          room_type_id: ประเภทห้องพัก
+      room_type:
+        name: ชนิดของห้อง
+        short_name: ชื่อย่อ
+        used: สถานะการใช้งาน
+      room:
+        floor_id: ชั้น
+        room_no: หมายเลขห้อง
+        status: สถานะห้อง
+        used: สถานะการใช้งาน
+        seq: ลำดับ
+        room_type_id: ประเภทห้องพัก
+      rsvt_status:
+        name: สถานะการจอง
+        used: สถานะการใช้งาน
+        status: สถานะ
+      rsvt_type:
+        name: วิธิการจอง
+        used: สถานะการใช้งาน
+      shift:
+        name: รอบการทำงาน
+        start_at: เริ่มงานเมื่อ
+        end_at: สิ้นสุดงานเมื่อ
+        used: สถานะการใช้งาน
+      src_gst:
+        name: แหล่งที่มาของแขก
+        used: สถานะการใช้งาน
+      product:
+        name: สินค้า/บริการ
+        price: ราคา
+        category: หมวด
+        config: กำหนด
+        used: สถานะการใช้งาน
+        vol: ปริมาณ
+        per_unit: ราคาต่อหน่วย
+        prodoct_place_id: พื้นที่
+      product_place:
+        name: ชื่อ
+        used: สถานะการใช้งาน
+      input_type:
+        contact_id: ชื่อผู้จอง
+        tel: เบอร์โทร
+        nation_id: สัญชาติ
+        agent_id: ตัวแทน
+        gst_type_id: ประเภทของแขก
+        gst_level_id: ระดับความสำคัญของแขก
+        src_gst_id: แหล่งที่มาของแขก
+        prpt_grp_id:  ลักษณะของ Group
+        rsvt_type_id: วิธีการจอง
+        rsvt_status_id: สถานะการจอง
+        adult: ผู้ใหญ่
+        child: เด็ก
+        night: จำนวนวัน
+        arvl_at: วันที่ เช็คอิน
+        dpt_at: วันที่เช็คเอาท์
+        room_type_id: ประเภทห้อง
+        location: Location
+        room_id: หมายเลขห้อง
+        rate_code_id: รหัสราคา
+        room_rate: ราคาห้องพัก
+        abf_rate: ราคาอาหารเช้า
+        ext_bed_rate: ราคาเตียงพิเศษ
+        paid: ชำระแล้ว
+        paid_id: ประเภทการจ่ายเงิน
+        ref: อ้างอิง
+        remark: หมายเหตุ
+      stay_list:
+        contact_id: ชื่อผู้จอง
+        input_type_id: จองห้องพักแบบรายบุคคล
+        fname: ชื่อ
+        lname: นามสกุล
+        arvl_at: วันที่ เช็คอิน
+        dpt_at: วันที่ เช็คเอาท์
+        room_type_id: ประเภทห้อง
+        room_id: หมายเลขห้องพัก
+        abf_rate: ราคาอาหารเช้า
+        ext_bed_rate: ราคาเตียงพิเศษ
+        status: สถานะ
+      contact:
+        name: ชื่อผู้ติดต่อ
+        tel: เบอร์โทร
+        address: ที่อยู่
+        cid: หมายเลขบัตร
+      room_list:
+        room_type_id: ประเภทห้องพัก
+        room_id: หมายเลขห้อง
+        room_rate: ราคาห้องพัก
+      expense:
+        room_list_id: หมายเลขห้อง
+        product_id: สินค้า/บริการ
+        price: ราคา
+        vol: ปริมาณ
+        ref: หมายเลขอ้างอิง
+  # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository
+  activemodel:
+    <<: *model
+    errors:
+      <<: *errors
+  activerecord:
+    <<: *model
+    errors:
+      <<: *errors
+      
+  
+  html:
+    title: ""
+    reservation: จองห้องพัก
+    user: ผู้ใช้งาน
+    admin: ผู้ดูแลระบบ
+    config: ตั้งค่าใช้งาน
+    full_name: ชื่อ-นามสกุล
+    username: ชื่อผู้ใช้งาน
+    language: ภาษา
+    action: พฤติกรรม
+    save: บันทึก
+    add: เพิ่ม
+    edit: แก้ไข
+    update: แก้ไข
+    delete: ลบ
+    back: ย้อนกลับ
+    save_success: บันทึกเสร็จเรียบร้อย
+    update_success: แก้ไขเสร็จเรียบร้อย
+    thai: ไทย
+    english: อังกฤษ
+    menu: เมนู
+    roll: สิทธิการใช้งาน
+    used1: ใช้งาน
+    used0: ไม่ใช้งาน
+    reserved: ถูกจองแล้ว
+    occupied_clean: มีแขกพักทำความสะอาดแล้ว
+    occupied_dirty: มีแขกพักไม่ทำความสะอาด
+    vacant_clean: ห้องว่างทำความสะอาดแล้ว
+    vacant_dirty: ห้องว่างยังไม่ทำความสะอาด
+    out_off_order: ปิดซ่อม
+    cancel: ยกเลิก
+    rsvt_idv: จองห้องพักแบบรายบุคคล
+    rsvt_grp: จองห้องพักแบบกลุ่ม
+    active: ยืนยัน
+    in_process: กำลังดำเนินการ
+    cancel_reservation: ยกเลิกการจอง
+    check_in: เช็คอิน
+    check_out: เช็คเอาท์
+    error_room_id: กรุณาเลือกวันที่จอง และประเภทห้อง
+    error_rate_code: กรุณาเลือก ประเภทห้องพัก และรหัสราคา
+    name_list: รายชื่อ
+    reservation_individule: จองห้องพักแบบรายบุคคล
+    reservation_group: จองห้องพักแบบกลุุ่ม
+    reservation_name: ชื่อผู้จอง
+    room: ห้อง
+    floor: ชั้น
+    select: เลือก
+    room_no: หมายเลขห้อง
+    contact: ผู้ติดต่อ
+    room_rate: ราคาห้องพัก
+    status: สถานะ
+    ok: ยืนยัน
+    arvl_at: วันที่ เช็คอิน
+    dpt_at: วันที่ เช็คเอาท์
+    start_at: เริ่มวันที่
+    end_at: สิ้นสุดวันที่
+    reservation_forecast: ข้อมูลการจองห้องพัก
+    report: รายงาน
+    room_type: ประเภทห้องพัก
+    rsvt_date: จองวันที่
+    rsvt_status: สถานะการจอง
+    room_rate: ราคาห้องพัก
+    room_rate_auto: ราคาห้องพัก ออโต้
+    abf_rate: ราคาอาหารเช้า
+    abf_rate_include: ราคาอาหารเช้ารวมในห้อง
+    ext_bed_rate: ราคาเตียงพิเศษ
+    date: วันที่
+    ref: อ้างอิง
+    reception: แผนกต้อนรับ
+    check_in: เช็คอิน
+    room_not_available: ห้องไม่ว่างให้พัก
+    gst_his: ประวัติการเข้าพัก
+    cashier: แคชเชียร์
+    product: สินค้า
+    service: บริการ
+    posting: รายการค่าใช้จ่าย
+    expense: ค่าใช้จ่าย
+    price: ราคา
+    confirm: ยืนยัน
+    detail: รายการ
+    baht: บาท
+    please_do_again: กรุณาทำรายการอีกครั้ง
+    check_out_success: เช็คเอาท์ เสร็จเรียบร้อย
+    payment: การชำระเงิน
+    close: ปิด
+    folio: Folio
+    folio_no: Folio no
+    room_rate: ราคาห้องพัก
+    abf_rate: ราคาอาหารเช้า
+    ext_bed_rate: ราคาเตียงพิเศษ
+    deposit: มัดจำ
+    cash: เงินสด
+    credit: เครดิต
+    stay_status: สถานะการพัก
+    night_audit: Night audit
+    per_unit: ราคาต่อหน่วย
+    vol: ปริมาณ
+    price: ราคา
+    at_date: วันที่
+    amount: รวมเป็นเงิน
+    paid: จ่ายแล้ว
+    remain: คงเหลือ
+    remark: หมายเหตุ
+    no_move: ห้ามย้าย
+    charge: ค่าใช้จ่าย
+    move: ย้าย
+    cancel_move: ยกเลิกการย้าย
+    print: พิมพ์
+    shift: รอบการทำงาน
+    report_type: ประเภทรายงาน
+    guest_in_house: แขกในห้องพัก
+    fname: ชื่อ
+    lname: นามสกุล
+    debtor: ลูกหนี้
+    all: ทั้งหมด
+    day_use: Day Use
+    move_room: ย้ายห้องพัก
+    new: ใหม่
+    old: เก่า
+    total: รวมทั้งหมด
+    occupied: มีแขกพัก
+    person:  คน

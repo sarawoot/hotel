@@ -1,0 +1,19 @@
+<%= f.simple_fields_for  :room_lists do |b| %>
+  <fieldset style="border: 1px solid #cccccc;padding: 20px 10px 20px 10px;margin-bottom: 10px;">
+    <div class="row">
+      <div class="span5">
+        <%= b.input :room_type_id, collection: room_type_src %>
+        <%= b.input :room_id %>
+        <input type="hidden" id="<%= "#{b.object_name}".gsub(/(\])?\[/, "_").chop %>_room_id_old" value="<%=  b.object.room_id.to_s %>" >
+      </div>
+      <div class="span5"><%= b.input :room_rate %></div>
+    </div>
+    <%= link_to_add_fields("#{t("html.add")}", b, :stay_lists, "stay-list-fields", {:class => "btn"}, "set_new_row(this)") %><br /><br />
+    <%= render('tb_stay_list', :f => b) %>
+    <script>
+      creat_room_no("#<%= "#{b.object_name}[room_type_id]".gsub(/(\])?\[/, "_").chop %>",
+                    "#<%= "#{b.object_name}[room_id]".gsub(/(\])?\[/, "_").chop %>","<%=  b.object.room_id.to_s %>");
+      $("#<%= "#{b.object_name}[room_id]".gsub(/(\])?\[/, "_").chop %>").select2("enable", false);
+    </script>
+  </fieldset>
+<% end %>

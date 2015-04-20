@@ -1,0 +1,49 @@
+<% product_conf = begin Product.find(f.object.product_id).config rescue "" end %>
+
+<% if f.object.id.to_s == "" %>
+<tr>
+  <td>
+    <%= f.select "product_id", options_for_select(product_all_src,f.object.product_id), {prompt: ""}, {style: "width: 300px;"} %>
+    <input type="hidden" id="<%= f.object_name.gsub(/(\])?\[/, "_").chop %>_config" value="<%= product_conf %>">
+  </td>
+  <td><%= f.number_field :vol %></td>
+  <td><%= f.number_field :per_unit %></td>
+  <td><%= f.number_field :price, readonly: true %></td>
+  <td><%= link_to_remove_table('<i class="icon-remove"></i>'.html_safe, f,{},"summary_charge()") %></td>
+</tr>
+
+<script>
+    set_product($("#<%= "#{f.object_name}".gsub(/(\])?\[/, "_").chop %>_product_id"));
+    set_price("#<%= "#{f.object_name}".gsub(/(\])?\[/, "_").chop %>_price",
+              "#<%= "#{f.object_name}".gsub(/(\])?\[/, "_").chop %>_vol",
+              "#<%= "#{f.object_name}".gsub(/(\])?\[/, "_").chop %>_per_unit");
+</script>
+<% end %>
+
+
+<% if f.object.id.to_s != "" %>
+<tr>
+  <td>
+    <%= f.select "product_id", options_for_select(product_all_src,f.object.product_id), prompt: "" %>
+    <input type="hidden" id="<%= f.object_name.gsub(/(\])?\[/, "_").chop %>_config" value="<%= product_conf %>">
+  </td>
+  <td><%= f.number_field :vol, readonly: is_user? %></td>
+  <td><%= f.number_field :per_unit, readonly: is_user? %></td>
+  <td><%= f.number_field :price, readonly: true %></td>
+  <td>
+    <% if is_admin? %>
+      <%= link_to_remove_table('<i class="icon-remove"></i>'.html_safe, f,{},"summary_charge()") %>
+    <% end %>
+  </td>
+</tr>
+
+<script>
+    set_product($("#<%= "#{f.object_name}".gsub(/(\])?\[/, "_").chop %>_product_id"));
+    <% if is_user? %>
+      $("#<%= "#{f.object_name}".gsub(/(\])?\[/, "_").chop %>_product_id").select2("readonly", true);
+    <% end %>
+    set_price("#<%= "#{f.object_name}".gsub(/(\])?\[/, "_").chop %>_price",
+              "#<%= "#{f.object_name}".gsub(/(\])?\[/, "_").chop %>_vol",
+              "#<%= "#{f.object_name}".gsub(/(\])?\[/, "_").chop %>_per_unit");
+</script>
+<% end %>

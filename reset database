@@ -1,0 +1,9 @@
+rs = InputType.all
+rs.each{|u| u.destroy}
+rs = Folio.all
+rs.each{|u| u.destroy}
+rs = LogExpense.all
+rs.each{|u| u.destroy}
+rs = LogMoveRoom.all
+rs.each{|u| u.destroy}
+Room.update_all({status: '1'})

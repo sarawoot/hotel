@@ -1,0 +1,37 @@
+<%= simple_form_for(@product, :html => {:class => 'form-horizontal' }) do |f| %>
+
+  <div class="form-inputs">
+    <%= f.input :config, collection: arr_product_config %>
+    
+    <%= f.input :name %>
+    <%= f.input :price %>
+    <%= f.input :product_place_id, collection: product_place_src %>
+    
+    <%= f.input :used, :wrapper => :append   do %>
+      <%= f.check_box :used, {},'1','0'  %>
+    <% end %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit (@product.new_record? ? "#{t "html.save"}"  : "#{t "html.update"}" ), class: "btn btn-primary" %>
+      <%= link_to "#{t "html.back" }", products_path, class: "btn" %>
+  </div>
+<% end %>
+<script>
+  $(function(){
+    
+    $("#product_config").change(function(){
+      if ($(this).val() != ""){
+        $("#product_price").val("");
+        $("#product_price").attr("ReadOnly","");     
+        //$("#product_product_place_id").attr("disabled","");     
+      }
+      else{
+        $("#product_price").removeAttr("ReadOnly");
+        //$("#product_product_place_id").removeAttr("disabled");     
+
+      }
+    }).change();
+    
+  });
+</script>

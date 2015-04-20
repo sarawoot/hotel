@@ -1,0 +1,22 @@
+<table class="table table-hover table-bordered" id="stay_list_tb">
+  <thead>
+    <th><%= raw(t("activemodel.attributes.stay_list.fname"))%></th>
+    <th><%= raw(t("activemodel.attributes.stay_list.lname"))%></th>
+    <th><%= raw(t("activemodel.attributes.stay_list.abf_rate"))%></th>
+    <th><%= raw(t("activemodel.attributes.stay_list.ext_bed_rate"))%></th>
+    <th><%= raw(t("html.menu"))%></th>
+  </thead>
+  </thead>
+  <tbody>
+  <%= f.simple_fields_for  :stay_lists do |b| %>
+    <tr class="fields">
+      <td><%= b.text_field :fname, style: "width:120px;" %></td>
+      <td><%= b.text_field :lname, style: "width:120px;" %></td>
+      <td><%= b.number_field :abf_rate, style: "width:120px;" %></td>
+      <td><%= b.number_field :ext_bed_rate, style: "width:120px;" %></td>
+      <td><%= link_to_remove_fields('<i class="icon-remove"></i>'.html_safe, b) %></td>
+    </tr>
+  <% end %>
+  </tbody>  
+</table>
+

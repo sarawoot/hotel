@@ -1,0 +1,15 @@
+<%= simple_form_for(@user, :html => {:class => 'form-horizontal' }) do |f| %>
+  <div class="form-inputs">
+    <%= f.input :fname %>
+    <%= f.input :lname %>
+    <%= f.input :roll, collection: arr_roll, include_blank: false %>
+    <%= f.input :lang, collection: arr_lang, include_blank: false %>
+    <%= f.input :username %>
+    <%= f.input :password %>
+    <%= f.input :password_confirmation %>
+  </div>
+  <div class="form-actions">
+    <%= f.submit (@user.new_record? ? "#{t "html.save"}"  : "#{t "html.update"}" ), class: "btn btn-primary" %>
+    <%= link_to "#{t "html.back" }", users_path, class: "btn" %>
+  </div>
+<% end %>

@@ -1,0 +1,7 @@
+<% @folios.each {|u| %>
+
+<%  folio_name = u.folio_no
+    folio_name += "(#{u.remark})" if u.remark.to_s != "" %>
+
+<option value="<%= u.id%>"><%= folio_name %> </option>
+<% } %>

@@ -1,0 +1,168 @@
+<%= content_for :js_footer do %>
+<style>
+
+.room-1 {
+  background-color: green;
+  color: white;
+}
+.room-2 {
+  background-color: blue;
+  color: white;
+}
+.room-4 {
+  background-color: pink;
+  color: black;
+}
+.room-5 {
+  background-color: gray;
+  color: black;
+}
+.room-0 {
+  background-color: red;  
+  color: white;
+}
+
+</style>
+<% end %>
+<div class="page-header">
+  <h3><%= raw("#{t "activemodel.models.room"}") %></h3>
+</div>
+
+<div class="row">
+  <div class="span8">
+    
+    
+    <div class="well" >
+      <%= link_to raw("#{t("night_audit")}"), night_audit_action_path, class: "btn btn-primary", :confirm=>'Are you sure?' %>
+    </div>
+    <center><h4><b style="color: #a4a4a4;"><u><i>Total <%= @rooms.total_count %> rooms</i></u></b></h4></center>
+      
+    <table class="table table-bordered" style="width: 250px;">
+      <tr>
+        <td><b><%= status_room(1) %></b></td>
+        <td><%= Room.count(conditions: "status = '1'") %></td>
+      </tr>
+      <tr>
+        <td><b><%= "#{t("html.occupied")}" %></b></td>
+        <td><%= Room.count(conditions: "status in ('4','5')") %></td>
+      </tr>
+    </table>
+      
+    <center><%= paginate @rooms %></center>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th><%= raw("#{t "activemodel.attributes.room.floor_id"}") %></th>      
+          <th><%= raw("#{t "activemodel.attributes.room.room_no"}") %></th>
+          <th><%= raw("#{t "html.guest_in_house"}") %></th>
+          <th><%= raw("#{t "activemodel.attributes.room.room_type_id"}") %></th>      
+          <th><%= raw("#{t "activemodel.attributes.room.status"}") %></th>      
+          <th><%= "#{t("html.menu")}"%></th>
+        </tr>
+      </thead>  
+    <% @rooms.each do |room| %>
+      <tr class="room-<%= room.status%>" style="height: 60px;">
+        <td><%= begin room.floor.name rescue "" end %></td>
+        <td><%= room.room_no %></td>
+        <td><%= raw(
+          begin
+            room_list_ = room.room_lists.where(status: '3').first
+            "#{InputType.find(room_list_.input_type_id).contact.name}<br />
+            #{date_dateform_sh(room_list_.arvl_at)} - #{date_dateform_sh(room_list_.dpt_at)}"
+          rescue
+            ""
+          end)  %></td>
+        <td><%= begin room.room_type.name rescue "" end %></td>
+        <td><%= status_room(room.status) %></td>
+        <td><%= link_to raw("<i class='icon-edit'></i>#{ t "html.edit"}"), home_edit_path(id: room.id), class: "btn btn-primary" %></td>
+      </tr>
+    <% end %>
+    </table>    
+  </div>
+
+  <div class="span4">
+    <div class="well">
+      <form method="get" class="form-horizontal">
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.status")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= select :search, :status, options_for_select(arr_status_room,begin params[:search][:status] rescue "" end), { :include_blank => true } %>
+          </div>
+        </div>
+    
+    
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.room_type")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= select :search, :room_type_id, options_for_select(room_type_src,begin params[:search][:room_type_id] rescue "" end), { :include_blank => true } %>
+          </div>
+        </div> 
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.floor")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= select :search, :floor_id, options_for_select(floor_src,begin params[:search][:floor_id] rescue "" end), { :include_blank => true } %>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.room")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= select :search, :room_id, options_for_select([]), { :include_blank => true } %>
+          </div>
+        </div> 
+
+        <div class="form-actions">
+          <%= submit_tag "#{t "html.ok"}", class: "btn btn-primary" %>
+        </div>
+          
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  $(function(){
+    $('#search_floor_id').change(function(){
+      if ($(this).val() == ""){
+        $("#search_room_id").attr("disabled","disabled");
+        $("#search_room_id").html("");
+        return 0;
+      }                          
+      $.ajax({
+        type: "GET",
+        url: "<%= rooms_path(format: "json" )%>",
+        data: {
+          search: {floor_id: $(this).val() }
+        },
+        success: function(data){
+          tmp = "<option value=''></option>"
+          $.each(data["data"],function(id, value){
+            tmp += "<option value='"+ value["id"]+"'>"+value["room_no"]+"</option>"
+          });
+          $("#search_room_id").html(tmp);
+          $("#search_room_id").removeAttr("disabled");
+          
+          <% begin %>
+              $("#search_room_id").val( <%=  %> );
+          <% rescue%>
+            <%= "" %>
+          <% end %>
+        },
+        dataType: 'json'
+      });
+      
+      //.attr('disabled', 'disabled');
+      
+    }).change();
+  });
+</script>
+
+
+
+
+
+
+
+
+

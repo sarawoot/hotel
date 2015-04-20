@@ -1,0 +1,23 @@
+<div class="page-header">
+  <h3><%= raw("#{t "activemodel.models.floor"}") %></h3>
+</div>
+<div class="well" ><%= link_to t("html.add"), new_floor_path, class: "btn btn-primary"  %></div>
+<center><%= paginate @floors %></center>
+<table class="table table-hover table-bordered table-striped">
+  <thead>
+    <tr>
+      <th><%= raw("#{t "activemodel.attributes.floor.seq"}") %></th>
+      <th><%= raw("#{t "activemodel.attributes.floor.name"}") %></th>
+      <th><%= raw("#{t "activemodel.attributes.floor..used"}") %></th>
+      <th><%= "#{t("html.menu")}"%></th>
+    </tr>
+  </thead>
+<% @floors.each do |floor| %>
+  <tr>
+    <td><%= floor.seq %></td>
+    <td><%= floor.name %></td>
+    <td><%= used(floor.used) %></td>
+    <td><%= link_to raw("<i class='icon-edit'></i>#{ t "html.edit"}"), edit_floor_path(floor), class: "btn" %></td>
+  </tr>
+<% end %>
+</table>

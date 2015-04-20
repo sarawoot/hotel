@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @gst_type.name %>
+</p>
+
+<p>
+  <b>Used:</b>
+  <%= @gst_type.used %>
+</p>
+
+
+<%= link_to 'Edit', edit_gst_type_path(@gst_type) %> |
+<%= link_to 'Back', gst_types_path %>

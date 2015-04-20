@@ -1,0 +1,198 @@
+<div class="page-header">
+  <h3><%= raw("#{t "html.check_out"} / #{t("html.posting")}") %></h3>
+</div>
+<div style="float: right">
+  <%= link_to "#{t("html.back")}", check_out_index_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) }), class: "btn"%>  
+</div>
+<div style="clear: both;"></div>
+<center><h4>
+  <%= @input_type.full_name %><b>( <%= date_dateform_sh(@input_type.arvl_at) %>&nbsp;-&nbsp;<%= date_dateform_sh(@input_type.dpt_at) %> )</b>
+</h4></center>
+<div id="folio"></div>
+<%= render "form_folio" %>
+<%= render "add_charge" %>
+<%= render "edit_charge" %>
+<%= render "check_out_form" %>
+<%= render "print_folio" %>
+<%= render "move_room" %>
+<%= content_for :js_footer do %>
+  <%= render "js_enable_dnd" %>
+  <%= render "toolbar" %>
+  <script type="application/x-javascript">
+  $(function(){
+    $('#folio').treegrid({
+      title:'<%= "#{t("html.check_out")}"%>',
+      rownumbers: true,
+      fitColumns:true,
+      url:'<%= get_folio_path(format: "json", input_type_id: params[:input_type_id])%>',
+      idField:'id',
+      treeField:'folio_no',
+      showFooter:true,
+      toolbar:toolbar,
+      columns:[[
+        {title:'<%= "#{t("html.folio_no")}"%>',field:'folio_no',width: 180},
+        {title:'<%= "#{t("html.product")}"%> / <%= "#{t("html.service")}"%>',
+          field:'product_id',width: 180,
+          formatter:function(value,row){
+            return row.product_name;
+          },
+          editor:{
+            type:'combobox',
+            options:{
+              valueField:'id',
+              textField:'name',
+              url:'<%= product_combo_path(format: "json")%>'
+            }
+          } 
+        },
+        {title:'<%= "#{t("html.per_unit")}"%>',field:'per_unit',width: 120,editor:'numberbox'},
+        {title:'<%= "#{t("html.vol")}"%>',field:'vol',width: 80,editor:'numberbox'},
+        {title:'<%= "#{t("html.price")}"%>',field:'price',width: 120,editor:'numberbox'},
+        {title:'<%= "#{t("html.at_date")}"%>',field:'at_date',width: 100,editor:{
+          type:'datebox',
+          options:{
+            formatter: function(date){
+              var y = date.getFullYear();
+              var m = date.getMonth()+1;
+              var d = date.getDate();
+              return (d<10?('0'+d):d)+'/'+(m<10?('0'+m):m)+'/'+y;
+            },
+            parser:function myparser(s){
+              if (!s) return new Date();
+              var ss = (s.split('-'));
+              var y = parseInt(ss[0],10);
+              var m = parseInt(ss[1],10);
+              var d = parseInt(ss[2],10);
+              if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+                return new Date(y,m-1,d);
+              } else {
+                return new Date();
+              }
+            }
+          }
+        }},
+        {title:'<%= "#{t("html.room_no")}"%>',field:'room',width: 100},
+        {title:'<%= "#{t("html.ref")}"%>',field:'ref',width: 120},
+      ]],
+      rowStyler:function(row){
+        if (row.price < 0){  
+          return 'color: red;font-weight:bold;';  
+        }  
+      }
+    });
+    
+    $("#confirm_gen_folio").on("click",function(){
+      $.ajax({
+        type: "POST",
+        url: "<%= create_folio_path(format: "json" )%>",
+        data: {
+          input_type_id: <%= params[:input_type_id] %>,
+          remark: $("#remark").val()
+        },
+        success: function(data){
+          if (data["success"] == true) {
+            $('#gen_folio').modal("hide");
+            $("#folio").treegrid("reload");
+          }
+          else{
+            alert("<%= "#{t("html.please_do_again")}" %>");
+          }
+        },
+        dataType: 'json'
+      });
+    });
+    <% product = product_all_src(false)
+        product = product.collect{|u|{
+          id: u.id,
+          text: "#{u.place_name}#{"/" if u.place_name.to_s != ""}#{u.name}"
+    }}%>
+    $("#charge_product_id").select2({
+      data:{ results: <%= raw(product.to_json) %> }     
+    });
+    $("#echarge_product_id").select2({
+      data:{ results: <%= raw(product.to_json) %> }     
+    });
+    $("#charge_product_id").change(function(){
+      $.ajax({
+        type: "GET",
+        url: "<%= product_id_path(format: "json" )%>",
+        data: {
+          id: $("#charge_product_id").val() 
+        },
+        success: function(data){
+          $("#charge_price").val(data.price);
+          $("#charge_vol").val(1);
+          $("#charge_per_unit").val(data.price);
+        },
+        dataType: 'json'
+      }); 
+    });
+    $("#charge_per_unit,#charge_vol").change(function(){
+      $("#charge_price").val( Number($("#charge_vol").val()) * Number($("#charge_per_unit").val()) );
+    });
+    
+    
+    $("#echarge_product_id").change(function(){
+      $.ajax({
+        type: "GET",
+        url: "<%= product_id_path(format: "json" )%>",
+        data: {
+          id: $("#echarge_product_id").val() 
+        },
+        success: function(data){
+          $("#echarge_price").val(data.price);
+          $("#echarge_vol").val(1);
+          $("#echarge_per_unit").val(data.price);
+        },
+        dataType: 'json'
+      }); 
+    });
+    
+    $("#echarge_per_unit,#echarge_vol").change(function(){
+      $("#echarge_price").val( Number($("#echarge_vol").val()) * Number($("#echarge_per_unit").val()) );
+    });
+    
+    $("#confirm_add_charge").on("click",function(){
+      $.ajax({
+        type: "POST",
+        url: "<%= add_charge_path(format: "json" )%>",
+        data:$("#form_add_charge").serialize(),
+        success: function(data){
+          if (data["success"] == true) {
+            $('#add_charge').modal("hide");
+            $("#folio").treegrid("reload");
+          }
+          else{
+            alert("<%= "#{t("html.please_do_again")}" %>");
+          }
+        },
+        dataType: 'json'
+      }); 
+    });
+    
+    $("#confirm_edit_echarge").on("click",function(){
+      $.ajax({
+        type: "POST",
+        url: "<%= edit_charge_path(format: "json" )%>",
+        data:$("#form_edit_charge").serialize(),
+        success: function(data){
+          if (data["success"] == true) {
+            $('#edit_charge').modal("hide");
+            $("#folio").treegrid("reload");
+          }
+          else{
+            alert("<%= "#{t("html.please_do_again")}" %>");
+          }
+        },
+        dataType: 'json'
+      }); 
+    });
+    $("#confirm_print_folio").on("click",function(){
+      window.open("<%= check_out_folio_path%>?folio_id="+$("#folio_select :selected").val()); 
+    });
+  })  
+  </script>
+<% end %>
+
+
+

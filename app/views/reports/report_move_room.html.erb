@@ -1,0 +1,44 @@
+<div class="page-header">
+  <h3><%= "#{t("html.report")} #{t("html.move_room")}"%></h3>
+</div>
+<div class="row">
+  <div class="span4 offset4 well" style="padding: 0;" >
+    <div style="margin: 20px;">
+      <form method="get" class="form-horizontal" target="_blank">
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.start_date")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_start_date" name="search[start_date]" value="<%= begin params[:search][:start_date] rescue "" end %>" >            
+          </div>
+        </div>
+    
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.end_date")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_end_date" name="search[end_date]" value="<%= begin params[:search][:end_date] rescue "" end %>" >            
+          </div>
+        </div>
+    
+    
+        <input type="hidden" name="report" value="1">
+        <div class="form-actions">
+          <%= button_tag "#{t "html.ok"}", class: "btn btn-primary", id: "submit_report" %>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<%= content_for :js_footer do %>
+<script>
+  $(function(){
+    $('#search_start_date').datepicker({
+      format: 'dd/mm/yyyy'
+    });
+    
+    $('#search_end_date').datepicker({
+      format: 'dd/mm/yyyy'
+    });
+  });
+</script>
+<% end %>

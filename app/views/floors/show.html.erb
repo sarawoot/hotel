@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @floor.name %>
+</p>
+
+<p>
+  <b>Seq:</b>
+  <%= @floor.seq %>
+</p>
+
+<p>
+  <b>Used:</b>
+  <%= @floor.used %>
+</p>
+
+
+<%= link_to 'Edit', edit_floor_path(@floor) %> |
+<%= link_to 'Back', floors_path %>

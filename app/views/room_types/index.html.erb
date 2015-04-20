@@ -1,0 +1,25 @@
+<div class="page-header">
+  <h3><%= raw("#{t "activemodel.models.room_type"}") %></h3>
+</div>
+<div class="well" ><%= link_to t("html.add"), new_room_type_path, class: "btn btn-primary"  %></div>
+<center><%= paginate @room_types %></center>
+<table class="table table-hover table-bordered table-striped">
+  <thead>
+    <tr>
+      <th><%= raw("#{t "activemodel.attributes.room_type.name"}") %></th>
+      <th><%= raw("#{t "activemodel.attributes.room_type.short_name"}") %></th>
+      <th><%= raw("#{t "activemodel.attributes.room_type..used"}") %></th>
+      <th><%= "#{t("html.menu")}"%></th>
+    </tr>
+  </thead>
+<% @room_types.each do |room_type| %>
+  <tr>
+    <td><%= room_type.name %></td>
+    <td><%= room_type.short_name %></td>
+    <td><%= used(room_type.used) %></td>
+    <td><%= link_to raw("<i class='icon-edit'></i>#{ t "html.edit"}"), edit_room_type_path(room_type), class: "btn" %></td>
+  </tr>
+<% end %>
+</table>
+
+

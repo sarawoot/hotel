@@ -1,0 +1,492 @@
+en:
+  date:
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    formats:
+      default: ! '%Y-%m-%d'
+      long: ! '%B %d, %Y'
+      short: ! '%b %d'
+    month_names:
+    - 
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: about 1 hour
+        other: about %{count} hours
+      about_x_months:
+        one: about 1 month
+        other: about %{count} months
+      about_x_years:
+        one: about 1 year
+        other: about %{count} years
+      almost_x_years:
+        one: almost 1 year
+        other: almost %{count} years
+      half_a_minute: half a minute
+      less_than_x_minutes:
+        one: less than a minute
+        other: less than %{count} minutes
+      less_than_x_seconds:
+        one: less than 1 second
+        other: less than %{count} seconds
+      over_x_years:
+        one: over 1 year
+        other: over %{count} years
+      x_days:
+        one: 1 day
+        other: ! '%{count} days'
+      x_minutes:
+        one: 1 minute
+        other: ! '%{count} minutes'
+      x_months:
+        one: 1 month
+        other: ! '%{count} months'
+      x_seconds:
+        one: 1 second
+        other: ! '%{count} seconds'
+    prompts:
+      day: Day
+      hour: Hour
+      minute: Minute
+      month: Month
+      second: Seconds
+      year: Year
+  helpers:
+    select:
+      prompt: Please select
+    submit:
+      create: Create %{model}
+      submit: Save %{model}
+      update: Update %{model}
+  number:
+    currency:
+      format:
+        delimiter: ! ','
+        format: ! '%u%n'
+        precision: 2
+        separator: .
+        significant: false
+        strip_insignificant_zeros: false
+        unit: $
+    format:
+      delimiter: ! ','
+      precision: 3
+      separator: .
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: ! '%n %u'
+        units:
+          billion: Billion
+          million: Million
+          quadrillion: Quadrillion
+          thousand: Thousand
+          trillion: Trillion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: ! '%n %u'
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ! ', and '
+      two_words_connector: ! ' and '
+      words_connector: ! ', '
+  time:
+    am: am
+    formats:
+      default: ! '%a, %d %b %Y %H:%M'
+      long: ! '%B %d, %Y %H:%M'
+      short: ! '%d %b %H:%M'
+    pm: pm
+  #---------------------------------------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------------------------------------------
+  # my custom
+  errors: &errors
+    format: ! '%{attribute} %{message}'
+    messages:
+      accepted: must be accepted
+      blank: can't be blank
+      confirmation: doesn't match confirmation
+      empty: can't be empty
+      equal_to: must be equal to %{count}
+      even: must be even
+      exclusion: is reserved
+      greater_than: must be greater than %{count}
+      greater_than_or_equal_to: must be greater than or equal to %{count}
+      inclusion: is not included in the list
+      invalid: is invalid
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be less than or equal to %{count}
+      not_a_number: is not a number
+      not_an_integer: must be an integer
+      odd: must be odd
+      record_invalid: ! 'Validation failed: %{errors}'
+      taken: has already been taken
+      too_long:
+        one: is too long (maximum is 1 character)
+        other: is too long (maximum is %{count} characters)
+      too_short:
+        one: is too short (minimum is 1 character)
+        other: is too short (minimum is %{count} characters)
+      wrong_length:
+        one: is the wrong length (should be 1 character)
+        other: is the wrong length (should be %{count} characters)
+    template:
+      body: ! 'There were problems with the following fields:'
+      header:
+        one: 1 error prohibited this %{model} from being saved
+        other: ! '%{count} errors prohibited this %{model} from being saved'
+    models:
+      user:
+        attributes:
+          username:
+            invalid: should only contain letters, numbers, or .-_@
+            
+  model: &model
+    models:
+      user: User
+      agent: Agent
+      floor: Floor
+      gst_level: Guest level
+      gst_type: Guest type
+      nation: Nation
+      paid: Paid
+      prpt_grp: Group
+      rate_code: Rate Code
+      room_type: Room type
+      room: Room
+      rsvt_status: Reservation status
+      rsvt_type: Reservation type
+      shift: Shift
+      src_gst: Guest source
+      contact: Contact
+      product: Product/Service
+      product_place: Product Group
+    attributes:
+      folio:
+        remark: Remark
+      user:
+        email: Email
+        fname: First name
+        lname: Last name
+        username: Username
+        password: Password
+        password_confirmation: Password confirmation
+        lang: Language
+        roll: Permission
+      agent:
+        name: Agent name
+        used: Active status
+      floor:
+        name: Floor
+        used: Active status
+        seq: Sequence
+      gst_level: 
+        name: Guest level
+        used: Active status
+      gst_type: 
+        name: Guest type
+        used: Active status
+      nation: 
+        name: Nation
+        used: Active status
+      paid:
+        name: Paid
+        used: Active status
+      prpt_grp:
+        name: Group
+        used: Active status
+      rate_code:
+          name: Rate Code
+          used: Active status
+      rate_code_detail:
+          room_type_id: Room type
+          room_rate: Room rate
+          abf_rate: ABF rate
+          ext_bed_rate: Extra bed rate
+      room_type:
+        name: Room type
+        short_name: Short name
+        used: Active status
+      room:
+        floor_id: Floor
+        room_no: Room No
+        status: Status
+        used: Active status
+        seq: Sequence
+        room_type_id: Room type
+      rsvt_status:
+        name: Statis
+        used: Active status
+        status: Status
+      rsvt_type:
+        name: Type
+        used: Active status
+      shift:
+        name: Shift
+        start_at: Start time
+        end_at: End time
+        used: Active status
+      src_gst:
+        name: Source
+        used: Active status
+      product:
+        name: Product/Service
+        price: Price
+        category: Category
+        config: Config
+        used: Active status
+        vol: Volume
+        prodoct_place_id: Place
+      product_place:
+        name: ชื่อ
+        used: สถานะการใช้งาน
+      input_type:
+        contact_id: Contact
+        tel: Tel
+        nation_id: Nation
+        agent_id: Agent
+        gst_type_id: Guest type
+        gst_level_id: Guest level
+        src_gst_id: Guest source
+        prpt_grp_id: Group
+        rsvt_type_id: Reservation type
+        rsvt_status_id: Reservation status
+        adult: Adult
+        child: Child
+        night: Night
+        arvl_at: Arrival At
+        dpt_at: Daparture At
+        room_type_id: Room type
+        location: Location
+        room_id: Room No
+        rate_code_id: Rate code
+        room_rate: Room rate
+        abf_rate: ABF rate
+        ext_bed_rate: Extra bed rate
+        paid: Paid
+        paid_id: Paid
+        ref: Reference
+        remark: Remark
+      stay_list:
+        contact_id: Contact
+        input_type_id: Booking individual
+        fname: First name
+        lname: Last name
+        arvl_at: Arrival date
+        dpt_at: Departure date
+        room_type_id: Room Type
+        room_id: Room No
+        abf_rate: ABF rate
+        ext_bed_rate: Extra bed rate
+        status: Status
+      contact:
+        name: Contact name
+        tel: Tel
+        address: Address
+        cid: Card Id
+      room_list:
+        room_type_id: Room type
+        room_id: Room No
+        room_rate: Room rate
+      expense:
+        room_list_id: Room No
+        product_id: Product/Service
+        price: Price
+        vol: Volume
+        per_unit: Per unit
+        ref: Reference
+  # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository
+  activemodel:
+    <<: *model
+    errors:
+      <<: *errors
+  activerecord:
+    <<: *model
+    errors:
+      <<: *errors
+      
+  html:
+    title: ""
+    reservation: Reservation
+    user: User
+    admin: Admin
+    config: Configuretion
+    full_name: Full name
+    username: Username
+    language: Language
+    action: Action
+    save: Save
+    add: Add
+    edit: Edit
+    update: Update
+    delete: Delete
+    back: Back
+    save_success: Save successfuly
+    update_success: Edit successfuly
+    thai: Thai
+    english: English
+    menu: Menu
+    roll: Permission
+    used1: Active
+    used0: Not in use
+    reserved: Reserved
+    occupied_clean: Occupied clean
+    occupied_dirty: Occupied dirty
+    vacant_clean: Vacant clean
+    vacant_dirty: Vacant dirty
+    out_off_order: Out off order
+    cancel: Cancel
+    rsvt_idv: Reservation individual
+    rsvt_grp: Reservation group
+    active: Confirmation
+    in_process: In process
+    error_room_id: Please select Arrival At, Daparture At, Room type
+    error_rate_code: Please select Room type, Rate code
+    name_list: Name List
+    reservation_individule: Reservation individule
+    reservation_group: Reservation group
+    reservation_name: Reservation name
+    room: Room
+    floor: Floor
+    select: Select
+    room_no: Room No
+    contact: Contact
+    room_rate: Room Rate
+    status: Status
+    ok: OK
+    arvl_at: Arrival date
+    dpt_at: Departure date
+    start_at: Start date
+    end_at: End date
+    reservation_forecast: Reservation forecast
+    report: Report    
+    room_type: Room type
+    rsvt_date: Reservation date
+    rsvt_status: Reservation status
+    room_rate: Room rate
+    abf_rate: ABF rate
+    ext_bed_rate: Extra bed rate
+    date: Date
+    ref: Reference
+    reception: Reception
+    check_in: Check in
+    check_out: Check out
+    room_not_available: Room Not available
+    gst_his: Guest history
+    cashier: Cashier
+    product: Product
+    service: Service
+    posting: Posting
+    expense: Expense
+    price: Price
+    confirm: Confirm
+    detail: Detail
+    baht: Baht
+    please_do_again: Please do again
+    check_out_success: Check out success
+    payment: Payment
+    deposit: Deposit
+    close: Close
+    folio: Folio
+    folio_no: Folio no
+    room_rate: Room charge
+    room_rate_auto: Room charge auto
+    abf_rate: ABF charge
+    abf_rate_include: ABF charge include
+    ext_bed_rate: Extract bed rate
+    cash: Cash
+    credit: Credit
+    stay_status: Status Stay
+    night_audit: Night audit
+    per_unit: Per unit
+    vol: Volume
+    price: Price
+    at_date: At date
+    amount: Total
+    paid: Paid
+    remain: Net Balance
+    remark: Remark
+    no_move: Don't move
+    charge: Charge
+    move: Move
+    cancel_move: Cancel move
+    print: Print
+    shift: Shift
+    report_type: Report Type
+    guest_in_house: Guest in House
+    fname: First name
+    lname: Last name
+    debtor: Debtor
+    all: All
+    day_use: Day Use
+    move_room: Move room
+    new: New
+    old: Old
+    total: Total
+    occupied: Occupied
+    person: Person
+    

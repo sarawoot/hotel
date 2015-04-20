@@ -1,0 +1,154 @@
+<div class="page-header">
+  <h3><%= raw("#{t "html.check_out"} / #{t "html.posting"}") %></h3>
+</div>
+<div class="row">
+  <div class="span8">
+    <center><%= paginate @input_types %></center>
+    <table class="table table-hover table-bordered table-striped">
+      <thead>
+        <tr>
+          <th><%= raw("#{t "html.reservation_name"}") %></th>
+          <th><%= raw("#{t "html.room_no"}") %></th>
+          <th><%= raw "#{t("html.ref")}"%></th>
+          <th><%= raw "#{t("html.status")}" %></th>
+          <th><%= raw "#{t("html.menu")}" %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @input_types.each { |u| %>
+          <tr style="height: 60px;">
+            <td>
+              <%= begin u.full_name rescue "N/A" end %>
+              <br />
+              <%= begin date_dateform_sh(u.arvl_at) rescue "" end %> - <%= begin date_dateform_sh(u.dpt_at) rescue "" end %>
+            </td>
+            <td><%= begin u.room_lists.where(status: ['3', '4']).collect{|u| u.room.room_no}.join(", ") rescue "N/A" end %></td>
+            <td><%= u.ref %></td>
+            <td><%= status_stay_lists(u.stay_status) %><br /><%= begin "(#{User.find(u.room_lists.collect{|u| u.arvl_by }.uniq).collect{|u| u.fname }.join(" ,")})" rescue "" end %></td>
+            <td><%= link_to raw("<i class='icon-edit'></i>"), check_out_path(input_type_id: u.id), class: "btn btn-small" %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>  
+  </div>
+  <div class="span4">
+    <div class="well">
+      <form method="get" class="form-horizontal">
+        
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.room_no")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= collection_select(:search, :room_id,
+              room_src(false), :id, :room_no,prompt: "",
+              selected: begin params[:search][:room_id] rescue "" end )%>            
+          </div>
+        </div>
+        
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.contact")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_contact_id" name="search[contact_id]" >
+          </div>
+        </div>
+        
+        
+        <!--<div class="control-group">-->
+        <!--  <label class="control-label" style="width:90px;"><%#= raw "#{t("html.status")}" %></label>-->
+        <!--  <div class="controls" style="margin-left: 100px;">            -->
+        <!--    <%#= collection_select(:search, :rsvt_status_id,-->
+        <!--      rsvt_status_src(false), :id, :name,prompt: "",-->
+        <!--      selected: begin params[:search][:rsvt_status_id] rescue "" end )%>            -->
+        <!--  </div>-->
+        <!--</div>-->
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.stay_status")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= select :search, :stay_status, options_for_select(arr_status_stay_lists,begin params[:search][:stay_status] rescue "" end), { :include_blank => true } %>          
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.start_at")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_start_at" name="search[start_at]" value="<%= begin params[:search][:start_at] rescue "" end %>" >            
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.end_at")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_end_at" name="search[end_at]" value="<%= begin params[:search][:end_at] rescue "" end %>"  >            
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.ref")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_ref" name="search[ref]" value="<%= begin params[:search][:ref] rescue "" end %>" >            
+          </div>
+        </div>
+      
+        <div class="form-actions">
+          <%= submit_tag "#{t "html.ok"}", class: "btn btn-primary" %>
+        </div>
+      </form>
+    </div>    
+  </div>
+</div>
+
+<script>
+  $(function(){
+    $("#search_room_id").select2({allowClear: true,placeholder:"<%= "#{t("html.select")} #{t("html.room_no")}" %>",});
+    $("#search_contact_id").select2({
+      placeholder: "<%= "#{t("html.select")} #{t("html.contact")}" %>",
+      minimumInputLength: 3,
+      allowClear: true,
+      width: 220,
+      ajax: {
+        url: "<%= contacts_path(format: "json") %>",
+        dataType: 'json',
+        quietMillis: 500,
+        data: function (term, page) {
+          return {
+            q: term,
+            page: page,
+            page_limit: 20
+          };
+        },
+        results: function (data, page) {
+          var more = (page * 20) < data.total;
+          return {results: data.data, more: more};
+        }
+      },
+      escapeMarkup: function (m) { return m; },
+      formatResult: function (item, page) {
+        return item.name; 
+      },
+      formatSelection: function (item, page) {
+        return item.name; 
+      },
+    });
+    
+    
+    $('#search_start_at').datepicker({
+      format: 'dd/mm/yyyy'
+    });
+    
+    $('#search_end_at').datepicker({
+      format: 'dd/mm/yyyy'
+    });
+    
+    <% begin %>
+      <% contact = Contact.find(params[:search][:contact_id])%>
+      $("#search_contact_id").select2("data", {id: <%= contact.id%>, name: "<%= contact.name %>"})
+    <% rescue %>
+    <%= "" %>
+    <% end %>
+    
+  }); 
+</script>
+
+

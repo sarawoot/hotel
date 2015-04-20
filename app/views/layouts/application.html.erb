@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title><%= t("html.title") %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+      
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <%= javascript_include_tag 'html5shiv-printshiv' %>
+    <![endif]-->
+    <%= yield :css_header %>
+    <%= javascript_include_tag "application" %>
+    <%= yield :js_footer %>
+    <%= csrf_meta_tags %>
+</head>
+<body style="background-color: rgb(73, 95, 84);">
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container" >
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                
+                <%= link_to "#{t("html.title")}", root_url, class: "brand"%>
+                <div class="nav-collapse">
+                    <% if logged_in? %>
+                    <ul class="nav">
+                        
+                        <li class="<%= 'active' if current_tab == :rsvt %>">
+                            <%= link_to raw("#{t("html.reservation")}"),
+                                reservation_index_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) }) %>
+                        </li>
+                        
+                        <li class="divider-vertical"></li>
+                        
+                        <li class="dropdown <%= 'active' if current_tab == :reception %>" >
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t("html.reception")%><b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><%= link_to raw("#{t("html.check_in")}"), check_in_index_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) }) %></li>
+                            </ul>
+                        </li>
+                        <li class="divider-vertical"></li>
+                        
+                        
+                        <li class="dropdown <%= 'active' if current_tab == :cashier %>" >
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t("html.cashier")%><b class="caret"></b></a>
+                            <ul class="dropdown-menu">                      
+                                <li><%= link_to raw("#{t("html.check_out")} / #{t("html.posting")}"),
+                                check_out_index_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now),stay_status: '1' }) %></li>
+                                <li><%= link_to raw("#{t("html.charge")}"), other_charge_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) }) %></li>
+                            </ul>
+                        </li>
+                        <li class="divider-vertical"></li>
+                        
+                        <li class="<%= 'active' if current_tab == :contact %>"><%= link_to raw("#{t("activemodel.models.contact")}"), contacts_path%></li>
+                        
+                        <li class="divider-vertical"></li>
+                        <li class="dropdown <%= 'active' if current_tab == :report %>" >
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t("html.report")%><b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><%= link_to "Transaction Report", transaction_report_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) })%></li>
+                                <li><%= link_to "Summary Transaction Report", summary_transaction_report_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) })%></li>
+                                <li><%= link_to "Guest in House", guest_in_house_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) })%></li>
+                                <li><%= link_to raw("#{t("html.reservation_forecast")}"), rsvt_forecast_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) })%></li>
+                                <li><%= link_to raw("#{t("html.gst_his")}"), gst_his_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) })%></li>
+                                <li><%= link_to "Out Standing Report group by Folio", report_out_standing_path(search: {at_date: date_dateform(Time.now) })%></li>
+                                <li><%= link_to "Trial Balance Report", report_trial_balance_path(search: {at_date: date_dateform(Time.now) })%></li>
+                                <li><%= link_to "ABF Report", report_abf_path(search: {start_date: date_dateform(Time.now), end_date: date_dateform(Time.now) })%></li>
+                                <li><%= link_to "#{t("html.move_room")}", report_move_room_path(search: {start_date: date_dateform(Time.now), end_date: date_dateform(Time.now) })%></li>
+                                <li><%= link_to "#{t("html.check_out")}", report_check_out_path(search: {start_date: date_dateform(Time.now), end_date: date_dateform(Time.now) })%></li>
+                                
+                            </ul>
+                        </li>
+                        <% if is_admin? %>
+                        <!---->
+                        <li class="divider-vertical"></li>
+                        <!---->
+                        
+                        <li class="dropdown <%= 'active' if current_tab == :admin %>" >
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t("html.admin")%><b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                    <a tabindex="-1" href="#"><%= t("html.config")%></a>
+                                    <ul class="dropdown-menu">
+                                        <li><%= link_to raw("#{t("activemodel.models.room_type")}"), room_types_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.floor")}"), floors_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.room")}"), rooms_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.agent")}"), agents_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.gst_level")}"), gst_levels_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.gst_type")}"), gst_types_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.src_gst")}"), src_gsts_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.nation")}"), nations_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.prpt_grp")}"), prpt_grps_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.rate_code")}"), rate_codes_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.rsvt_status")}"), rsvt_statuses_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.rsvt_type")}"), rsvt_types_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.shift")}"), shifts_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.product_place")}"), product_places_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.product")}"), products_path%></li>
+                                        <li><%= link_to raw("#{t("activemodel.models.user")}"), users_path%></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <% end %>
+                    </ul>
+                    <ul class="nav pull-right">
+                      <li><a href="#"><%= current_user.fname %>(Shift <%= Shift.find(get_shift).name %>)</a></li>
+                      <li class="divider-vertical"></li>
+                      <li><%= link_to "Logout", logout_path %></li>
+                    </ul>
+                        
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="background-color: white;padding: 20px;margin-bottom: 30px;">
+        <% flash.each do |name, msg| %>
+            <div class="alert alert-<%= name == :notice ? 'success' : 'error' %>">
+              <a class="close" data-dismiss="alert">&otimes;</a>
+              <%= msg %>
+            </div>
+              
+        <% end %>
+        <% if flash.to_json != "[]"  %>
+        <script>
+          $(function(){
+            setInterval(function(){
+              $("[class*=alert]").fadeOut()  
+            },10000);
+            
+          });
+        </script>  
+        <% end %>
+        <%= yield %>
+    </div>
+</body>
+</html>

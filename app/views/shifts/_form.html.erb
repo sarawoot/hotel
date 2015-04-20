@@ -1,0 +1,23 @@
+<%= content_for :css_header do %>
+<style>
+  select {
+    width: auto !important;
+  }
+</style>
+<% end %>
+<%= simple_form_for(@shift, :html => {:class => 'form-horizontal' }) do |f| %>
+
+  <div class="form-inputs">
+    <%= f.input :used, :wrapper => :append   do %>
+      <%= f.check_box :used, {},'1','0'  %>
+    <% end %>
+    <%= f.input :name %>
+    <%= f.input :start_at %>
+    <%= f.input :end_at %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit (@shift.new_record? ? "#{t "html.save"}"  : "#{t "html.update"}" ), class: "btn btn-primary" %>
+      <%= link_to "#{t "html.back" }", shifts_path, class: "btn" %>
+  </div>
+<% end %>

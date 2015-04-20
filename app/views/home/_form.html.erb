@@ -1,0 +1,54 @@
+<%= simple_form_for(@room, url: home_update_path(id: params[:id]), method: :post, :html => {:class => 'form-horizontal' }) do |f| %>
+
+  <div class="form-inputs">
+    <div class="control-group">
+      <label class="control-label" ><%= raw "#{t("html.floor")}" %></label>
+      <div class="controls" style="margin-top: 5px;">            
+        <%= begin @room.floor.name rescue "" end %>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" ><%= raw "#{t("html.room_no")}" %></label>
+      <div class="controls" style="margin-top: 5px;">         
+        <%= begin @room.room_no rescue "" end %>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" ><%= raw "#{t("html.room_type")}" %></label>
+      <div class="controls" style="margin-top: 5px;">          
+        <%= begin @room.room_type.name rescue "" end %>
+      </div>
+    </div>  
+    <%= f.input :status, collection: arr_status_room %>
+    
+    <fieldset>
+      <legend><%= "#{t("html.charge")}"%></legend>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <td><%= "#{t("html.fname")} - #{t("html.lname")}" %></td>
+            <td><%= "#{t("html.abf_rate")}"%></td>
+            <td><%= "#{t("html.ext_bed_rate")}"%></td>
+          </tr>
+        </thead>
+        <tbody>
+          <%= f.fields_for :stay_lists do |sl| %>
+            <% if sl.object.status == '1' %>
+              <tr>
+                <td><%= "#{sl.object.fname} #{sl.object.lname}" %></td>
+                <td><%= sl.number_field :abf_rate %></td>
+                <td><%= sl.number_field :ext_bed_rate %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </fieldset>
+    
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit (@room.new_record? ? "#{t "html.save"}"  : "#{t "html.update"}" ), class: "btn btn-primary" %>
+      <%= link_to "#{t "html.back" }", root_path, class: "btn" %>
+  </div>
+<% end %>

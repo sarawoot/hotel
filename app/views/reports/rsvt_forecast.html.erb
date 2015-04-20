@@ -1,0 +1,131 @@
+<div class="page-header">
+  <h3><%= raw("#{t "html.reservation_forecast"}") %></h3>
+</div>
+<div class="row">
+  <div class="span8">
+    <center><h4><b style="color: #a4a4a4;"><u><i>Total <%= @room_lists.total_count %> rooms</i></u></b></h4></center>
+    <center><%= paginate @room_lists %></center>
+    <table class="table table-hover table-bordered table-striped">
+      <thead>
+        <tr>
+          <td><%= raw("#{t "html.rsvt_date"}") %></td>
+          <td><%= raw("#{t "html.contact"}") %></td>
+          <td><%= raw("#{t "html.room_no"}") %></td>
+          <td><%= raw("#{t "html.room_type"}") %></td>
+          <td><%= raw("#{t "html.rsvt_status"}") %></td>
+          <td><%= raw("#{t "html.room_rate"}") %></td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @room_lists.each { |room|%>
+        <tr>
+          <td><%= begin date_dateform_sh(room.arvl_at) rescue "" end %> - <%= begin date_dateform_sh(room.dpt_at) rescue "" end %></td>
+          <td><%= begin room.input_type.contact.name rescue "" end %></td>
+          <td><%= begin room.room.room_no rescue "" end %></td>
+          <td><%= begin room.room_type.short_name rescue "" end %></td>
+          <td><%= begin status_room_lists(room.status) rescue "" end %></td>
+          <td><%= number_with_delimiter(room.room_rate) %></td>                    
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  <div class="span4">
+    <div class="well">
+      <form method="get" class="form-horizontal">
+        
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.room_type")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= select :search, :room_type_id, options_for_select(room_type_src,begin params[:search][:room_type_id] rescue "" end), { :include_blank => true } %>
+          </div>
+        </div>  
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.floor")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= select :search, :floor_id, options_for_select(floor_src,begin params[:search][:floor_id] rescue "" end), { :include_blank => true } %>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.room")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= select :search, :room_id, options_for_select([]), { :include_blank => true } %>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.status")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <%= select :search, :status, options_for_select(arr_status_room_lists,begin params[:search][:status] rescue "" end), { :include_blank => true } %>
+          </div>
+        </div>
+  
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.start_at")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_start_at" name="search[start_at]" value="<%= begin params[:search][:start_at] rescue "" end %>" >            
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.end_at")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_end_at" name="search[end_at]" value="<%= begin params[:search][:end_at] rescue "" end %>" >            
+          </div>
+        </div>
+          
+        <div class="form-actions">
+          <%= submit_tag "#{t "html.ok"}", class: "btn btn-primary" %>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function(){
+    $('#search_start_at').datepicker({
+      format: 'dd/mm/yyyy'
+    });
+    
+    $('#search_end_at').datepicker({
+      format: 'dd/mm/yyyy'
+    });
+    
+    $('#search_floor_id').change(function(){
+      if ($(this).val() == ""){
+        $("#search_room_id").attr("disabled","disabled");
+        $("#search_room_id").html("");
+        return 0;
+      }                          
+      $.ajax({
+        type: "GET",
+        url: "<%= rooms_path(format: "json" )%>",
+        data: {
+          search: {floor_id: $(this).val() }
+        },
+        success: function(data){
+          tmp = "<option value=''></option>"
+          $.each(data["data"],function(id, value){
+            tmp += "<option value='"+ value["id"]+"'>"+value["room_no"]+"</option>"
+          });
+          $("#search_room_id").html(tmp);
+          $("#search_room_id").removeAttr("disabled");
+          
+          <% begin %>
+            $("#search_room_id").val(<%= params[:search][:room_id] %>);
+          <% rescue%>
+            <%= "" %>
+          <% end %>
+        },
+        dataType: 'json'
+      });
+      
+      //.attr('disabled', 'disabled');
+      
+    }).change();
+  });
+</script>

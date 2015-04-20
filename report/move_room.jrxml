@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="move_room" language="groovy" pageWidth="581" pageHeight="793" columnWidth="541" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="458c7e62-7cbe-47be-a094-0ecfaf775e7e">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="start_date" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="user_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	log_move_rooms.created_at,
+	(select rooms.room_no from rooms where rooms.id = log_move_rooms.room_old_id) as room_old,
+	(select rooms.room_no from rooms where rooms.id = log_move_rooms.room_new_id) as room_new,
+	contacts.name as gst_name,
+	input_types.arvl_at,
+	input_types,dpt_at,
+	log_move_rooms.remark,
+	users.fname,
+	(select fname||'  '||lname from users where users.id = $P{user_id}) as username,
+	now() as print_at
+from
+	log_move_rooms
+	left join input_types on input_types.id = log_move_rooms.input_type_id
+	left join contacts on contacts.id = input_types.contact_id
+	left join users on users.id = log_move_rooms.user_id
+where
+	date(log_move_rooms.created_at) between $P{start_date} and $P{end_date}]]>
+	</queryString>
+	<field name="created_at" class="java.sql.Timestamp"/>
+	<field name="room_old" class="java.lang.String"/>
+	<field name="room_new" class="java.lang.String"/>
+	<field name="gst_name" class="java.lang.String"/>
+	<field name="arvl_at" class="java.sql.Timestamp"/>
+	<field name="input_types" class="java.lang.Object"/>
+	<field name="dpt_at" class="java.sql.Timestamp"/>
+	<field name="remark" class="java.lang.String"/>
+	<field name="fname" class="java.lang.String"/>
+	<field name="username" class="java.lang.String"/>
+	<field name="print_at" class="java.sql.Timestamp"/>
+	<pageHeader>
+		<band height="74" splitType="Stretch">
+			<textField pattern="dd/MM/yy HH:mm">
+				<reportElement uuid="5dc284b8-8984-403f-a48c-05812f60577d" x="441" y="14" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{print_at}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="71f37ce9-4309-4950-beba-d0eae0cb6660" x="441" y="54" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="e9dc57a5-48b4-48c7-a181-b602fb06ec89" x="479" y="34" width="45" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a202dae6-2b60-41ee-9efd-effee064f588" x="387" y="34" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Pages:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="959abced-5589-4127-be45-4447585f649c" x="0" y="34" width="541" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" isBold="true" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รายงานการย้ายห้องพัก/Room transfered report]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d88b48c3-1888-49e4-a460-7647199fcc3e" x="441" y="34" width="38" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER} + " / "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="29ba15b8-de9a-4135-bf38-5c25f8fe5bce" x="387" y="14" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Print On:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="05387504-5a53-49e4-b223-e1be86798662" x="0" y="0" width="541" height="34"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="24" isBold="true" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[โรงแรม เอส ทารา แกรนด์]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="46684796-ac26-4287-8763-f199d975eced" x="387" y="54" width="54" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[User:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="652cd52b-8789-4e63-adb8-f33cb724d122" x="0" y="54" width="541" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{start_date})
++ " - " + new SimpleDateFormat("dd/MM/yyyy").format($P{end_date})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="2c006cb7-eb95-45a5-b186-792145dd1a1e" x="0" y="0" width="44" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8cee224f-6f64-46a9-9df6-4da0d541cf95" x="44" y="0" width="44" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="54b316c6-4b73-443b-a03e-16c888b40a98" x="88" y="0" width="53" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Old Room]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b072b293-afda-4064-8896-614ba3e66148" x="141" y="0" width="56" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[New Room]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a3e42557-6e04-4844-aa68-56909db3916f" x="298" y="0" width="46" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Arvl Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f7ced13f-8208-44ef-8c0a-dc83eb46d7ab" x="344" y="0" width="55" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Dept Date ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9a596e17-2e1b-4315-819b-a572ff5246c3" x="399" y="0" width="94" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Remark]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f7a9f594-7a14-4dd9-9030-90428e5fb5bb" x="493" y="0" width="48" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[User]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f5d59d64-fba8-4867-8e6f-ec5933c047eb" x="197" y="0" width="101" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Guest Name]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="4f425ecc-b5c7-4465-8f19-e09ef1b3b92f" x="0" y="0" width="541" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="ffec0b43-120c-4009-abc7-0f8426766284" x="0" y="19" width="541" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="dd/MM/yy" isBlankWhenNull="true">
+				<reportElement uuid="1e72f161-3d48-4948-ab8e-4f44ffeccd72" x="0" y="0" width="44" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{created_at}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm" isBlankWhenNull="true">
+				<reportElement uuid="0c74f708-325f-4f16-8d8e-006b3edbd947" x="44" y="0" width="44" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{created_at}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8dd85f62-cea2-441e-a66a-0bf3df2f970c" x="88" y="0" width="53" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{room_old}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="f9d27e85-de96-4af7-b9a8-a05d31a12686" x="141" y="0" width="56" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{room_new}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yy" isBlankWhenNull="true">
+				<reportElement uuid="0e5169b0-7f28-4d74-9bd7-5d867b96dffe" x="298" y="0" width="46" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{arvl_at}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yy" isBlankWhenNull="true">
+				<reportElement uuid="98331c60-ff39-4e95-b0de-45b7dd73327c" x="343" y="0" width="56" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dpt_at}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2fdc9695-048e-4717-9fc7-661b211c9c56" x="399" y="0" width="94" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remark}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="15c5fbdf-7acc-417b-a10f-b8e2e5d775ac" x="493" y="0" width="48" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="440b1abb-6aab-4bed-ab47-df83c59df05d" x="197" y="0" width="101" height="20"/>
+				<textElement>
+					<font fontName="TH Sarabun New" size="14" pdfFontName="TH Sarabun New" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gst_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="1">
+			<line>
+				<reportElement uuid="328743c1-6db0-4a39-849c-618ee4152963" x="0" y="0" width="541" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

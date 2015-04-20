@@ -1,0 +1,59 @@
+<div id="add_charge" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel"><%= "#{t("html.add")} #{t("html.charge")}"%></h3>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal" id="form_add_charge">
+      <div class="control-group">
+        <label class="control-label" for="inputEmail"><%= "#{t("html.product")}/#{t("html.service")}" %></label>
+        <div class="controls">
+          <%#= select "charge", "product_id", options_for_select(product_all_src), prompt: "" %>
+          <%= text_field "charge", "product_id", {style: "width: 320px;"} %>
+        </div>
+      </div>
+  
+      <div class="control-group">
+        <label class="control-label" for="inputEmail"><%= "#{t("html.per_unit")}" %></label>
+        <div class="controls">
+          <%= number_field "charge", "per_unit" %>
+        </div>
+      </div>  
+  
+      <div class="control-group">
+        <label class="control-label" for="inputEmail"><%= "#{t("html.vol")}" %></label>
+        <div class="controls">
+          <%= number_field "charge", "vol" %>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputEmail"><%= "#{t("html.price")}" %></label>
+        <div class="controls">
+          <%= number_field "charge", "price", readonly: true %>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputEmail"><%= "#{t("html.room_no")}" %></label>
+        <div class="controls">
+          <% room_list = RoomList.select("room_lists.id,rooms.room_no").joins(:room)
+                          .where( hotel_src_id: current_user.hotel_src_id, input_type_id: params[:input_type_id], status: "3")%>
+          <%= select "charge", "room_list_id", options_for_select(room_list.collect{|u| [u.room_no,u.id]}), prompt: "" %>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputEmail"><%= "#{t("html.ref")}" %></label>
+        <div class="controls">
+          <%= text_field "charge", "ref" %>
+        </div>
+      </div> 
+      <input type="hidden" value="<%= params[:input_type_id]%>" name="charge[input_type_id]" />
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><%= "#{t("html.close")}"%></button>
+    <button class="btn btn-primary" id="confirm_add_charge"><%= "#{t("html.confirm")}"%></button>
+  </div>
+</div>

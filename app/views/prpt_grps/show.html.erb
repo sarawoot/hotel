@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @prpt_grp.name %>
+</p>
+
+<p>
+  <b>Used:</b>
+  <%= @prpt_grp.used %>
+</p>
+
+
+<%= link_to 'Edit', edit_prpt_grp_path(@prpt_grp) %> |
+<%= link_to 'Back', prpt_grps_path %>
