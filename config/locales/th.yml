@@ -205,7 +205,7 @@ th:
         password: รหัสผ่าน
         password_confirmation: ยืนยันรหัสผ่าน
         lang: "ภาษา"
-        roll: สิทธิการใช้งาน
+        role: สิทธิการใช้งาน
       agent:
         name: ชื่อ Agent
         used: สถานะการใช้งาน
@@ -232,7 +232,6 @@ th:
           name: Rate Code
           used: สถานะการใช้งาน
       rate_code_detail:
-          room_type_id: ประเภทห้อง
           room_rate: ราคาห้องพัก
           abf_rate: ราคาอาหารเช้า
           ext_bed_rate: ราคาเตียงพิเศษ
@@ -341,7 +340,7 @@ th:
       
   
   html:
-    title: ""
+    title: "โรงแรม"
     reservation: จองห้องพัก
     user: ผู้ใช้งาน
     admin: ผู้ดูแลระบบ
@@ -361,7 +360,7 @@ th:
     thai: ไทย
     english: อังกฤษ
     menu: เมนู
-    roll: สิทธิการใช้งาน
+    role: สิทธิการใช้งาน
     used1: ใช้งาน
     used0: ไม่ใช้งาน
     reserved: ถูกจองแล้ว
@@ -376,7 +375,6 @@ th:
     active: ยืนยัน
     in_process: กำลังดำเนินการ
     cancel_reservation: ยกเลิกการจอง
-    check_in: เช็คอิน
     check_out: เช็คเอาท์
     error_room_id: กรุณาเลือกวันที่จอง และประเภทห้อง
     error_rate_code: กรุณาเลือก ประเภทห้องพัก และรหัสราคา
@@ -389,7 +387,6 @@ th:
     select: เลือก
     room_no: หมายเลขห้อง
     contact: ผู้ติดต่อ
-    room_rate: ราคาห้องพัก
     status: สถานะ
     ok: ยืนยัน
     arvl_at: วันที่ เช็คอิน
@@ -401,11 +398,8 @@ th:
     room_type: ประเภทห้องพัก
     rsvt_date: จองวันที่
     rsvt_status: สถานะการจอง
-    room_rate: ราคาห้องพัก
     room_rate_auto: ราคาห้องพัก ออโต้
-    abf_rate: ราคาอาหารเช้า
     abf_rate_include: ราคาอาหารเช้ารวมในห้อง
-    ext_bed_rate: ราคาเตียงพิเศษ
     date: วันที่
     ref: อ้างอิง
     reception: แผนกต้อนรับ
@@ -417,7 +411,6 @@ th:
     service: บริการ
     posting: รายการค่าใช้จ่าย
     expense: ค่าใช้จ่าย
-    price: ราคา
     confirm: ยืนยัน
     detail: รายการ
     baht: บาท

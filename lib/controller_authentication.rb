@@ -55,11 +55,11 @@ module ControllerAuthentication
   end
   
   def is_admin?
-    current_user.roll == "admin"
+    current_user.role == "admin"
   end
   
   def is_user?
-    current_user.roll == "user"
+    current_user.role == "user"
   end
 
   private

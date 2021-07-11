@@ -11,6 +11,7 @@ class HomeController < ApplicationController
     rescue
       ""
     end
+
     @rooms = Room.joins(:floor).where(search.join(" and ")).order("floors.seq,rooms.seq").page(params[:page])
 
     respond_to do |format|

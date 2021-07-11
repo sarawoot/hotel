@@ -3,7 +3,7 @@ class ShiftsController < ApplicationController
   # GET /shifts
   # GET /shifts.json
   def index
-    @shifts = Shift.where(hotel_src_id: current_user.hotel_src_id).page(params[:page])
+    @shifts = Shift.where(hotel_src_id: current_user.hotel_src_id).order(:start_at).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

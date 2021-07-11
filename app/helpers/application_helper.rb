@@ -57,14 +57,14 @@ module ApplicationHelper
     ""
   end
   
-  def arr_roll
+  def arr_role
     [
       ["#{t("html.admin")}","admin"],  
       ["#{t("html.user")}","user"]  
     ]
   end
-  def roll(st)
-    arr = arr_roll
+  def role(st)
+    arr = arr_role
     arr.rassoc(st.to_s)[0]
   rescue
     ""

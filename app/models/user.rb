@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   # new columns need to be added here to be writable through mass assignment
-  attr_accessible :username, :email, :password, :password_confirmation, :fname, :lname, :lang, :roll, :hotel_src_id
+  attr_accessible :username, :email, :password, :password_confirmation, :fname, :lname, :lang, :role, :hotel_src_id
   cattr_accessor :hotel_src, :current_user_id
   attr_accessor :password
   before_save :prepare_password
@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   has_many :expenses
   has_many :log_move_rooms
 
-  validates_presence_of :username, :fname, :lname, :lang, :roll
+  validates_presence_of :username, :fname, :lname, :lang, :role
   validates_uniqueness_of :username, :allow_blank => true
   validates_format_of :username, :with => /^[-\w\._@]+$/i, :allow_blank => true
   #validates_format_of :email, :with => /^[-a-z0-9_+\.]+\@([-a-z0-9]+\.)+[a-z0-9]{2,4}$/i

@@ -236,7 +236,7 @@ en:
         password: Password
         password_confirmation: Password confirmation
         lang: Language
-        roll: Permission
+        role: Permission
       agent:
         name: Agent name
         used: Active status
@@ -370,7 +370,7 @@ en:
       <<: *errors
       
   html:
-    title: ""
+    title: "Hotel"
     reservation: Reservation
     user: User
     admin: Admin
@@ -390,7 +390,7 @@ en:
     thai: Thai
     english: English
     menu: Menu
-    roll: Permission
+    role: Permission
     used1: Active
     used0: Not in use
     reserved: Reserved
@@ -415,7 +415,6 @@ en:
     select: Select
     room_no: Room No
     contact: Contact
-    room_rate: Room Rate
     status: Status
     ok: OK
     arvl_at: Arrival date
@@ -427,9 +426,6 @@ en:
     room_type: Room type
     rsvt_date: Reservation date
     rsvt_status: Reservation status
-    room_rate: Room rate
-    abf_rate: ABF rate
-    ext_bed_rate: Extra bed rate
     date: Date
     ref: Reference
     reception: Reception
@@ -442,7 +438,6 @@ en:
     service: Service
     posting: Posting
     expense: Expense
-    price: Price
     confirm: Confirm
     detail: Detail
     baht: Baht

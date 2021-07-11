@@ -8,7 +8,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :password_hash
       t.string :password_salt
       t.string :lang, default: "en"
-      t.string :roll, default: "user"
+      t.string :role, default: "user"
       t.integer :hotel_src_id
       t.timestamps
     end

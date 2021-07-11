@@ -10,7 +10,7 @@
     <tr>
       <th><%= t("html.full_name")%></th>
       <th><%= t("html.username")%></th>
-      <th><%= t("html.roll")%></th>
+      <th><%= t("html.role")%></th>
       <th><%= "#{t("html.menu")}#{t("html.language")}"%></th>
       <th><%= "#{t("html.menu")}"%></th>
     </tr>
@@ -20,7 +20,7 @@
     <tr>
       <td><%= user.full_name %></td>
       <td><%= user.username %></td>
-      <td><%= roll(user.roll) %></td>
+      <td><%= role(user.role) %></td>
       <td><%= lang(user.lang) %></td>
       <td><%= link_to raw("<i class='icon-edit'></i>#{ t "html.edit"}"), edit_user_path(user), class: "btn" %></td>
     </tr>
