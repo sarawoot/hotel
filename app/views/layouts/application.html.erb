@@ -51,7 +51,7 @@
                         <li class="dropdown <%= 'active' if current_tab == :cashier %>" >
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t("html.cashier")%><b class="caret"></b></a>
                             <ul class="dropdown-menu">                      
-                                <li><%= link_to raw("#{t("html.check_out")} / #{t("html.posting")}"),
+                                <li><%= link_to raw("#{t("html.check_out")} / #{t("html.pos")}"),
                                 check_out_index_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now),stay_status: '1' }) %></li>
                                 <li><%= link_to raw("#{t("html.charge")}"), other_charge_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) }) %></li>
                             </ul>

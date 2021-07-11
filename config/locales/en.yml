@@ -436,7 +436,7 @@ en:
     cashier: Cashier
     product: Product
     service: Service
-    posting: Posting
+    pos: Pos
     expense: Expense
     confirm: Confirm
     detail: Detail

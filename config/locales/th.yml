@@ -409,7 +409,7 @@ th:
     cashier: แคชเชียร์
     product: สินค้า
     service: บริการ
-    posting: รายการค่าใช้จ่าย
+    pos: รายการค่าใช้จ่าย
     expense: ค่าใช้จ่าย
     confirm: ยืนยัน
     detail: รายการ

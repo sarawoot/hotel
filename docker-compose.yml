@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:13-alpine
+    container_name: postgres
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - ../pg_hotel:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: hotel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: P@ssw0rd
+      POSTGRES_INITDB_ARGS: --locale=th_TH.UTF-8
+      LANG: th_TH.UTF-8
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8888:8080"
+
+  jasperserver:
+    image: retriever/jasperserver:7.2.0
+    container_name: jasperserver
+    hostname: jasperserver
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      - DB_TYPE=postgresql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=P@ssw0rd
+    volumes:
+      - ../jasperserver_hotel:/jasperserver-import
+    depends_on:
+      - postgres
