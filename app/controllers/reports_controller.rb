@@ -119,7 +119,7 @@ class ReportsController < ApplicationController
     end
   end
 
-    def report_out_standing
+  def report_out_standing
     at_date = date_datesql(params[:search][:at_date])
     if at_date.to_s == ""
       render text: ""
@@ -370,11 +370,11 @@ class ReportsController < ApplicationController
     end
     if params[:report].to_s == "1"
       data = JasperReport.run_report({
-        report: "reports/hotel/abf",
+        report: "hotel/report/abf",
         format: "pdf",
         params: {
-          start_date: dateform_date(params[:search][:start_date]).to_i*1000,
-          end_date: dateform_date(params[:search][:end_date]).to_i*1000,
+          start_date: dateform_date(params[:search][:start_date]),
+          end_date: dateform_date(params[:search][:end_date]),
           user_id: current_user.id
         }
       })     

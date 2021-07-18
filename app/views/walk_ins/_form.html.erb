@@ -62,7 +62,7 @@
   </div>
 <% end %>
 <%= content_for :js_footer do %>
-<script type="application/x-javascript">
+<script>
   var total_gst = 0;
   <% if !@walk_in.new_record? %>
     total_gst = <%= begin StayList.count( conditions: {room_list_id: @walk_in.room_lists.collect{|u| u.id}}) rescue 0 end %>;
@@ -86,10 +86,15 @@
     remove_total_gst();
     $(link).prev("input[type=hidden]").val("1");
     $(link).closest(".fields").hide();
-  }  
+  }
+  
+  function get_total_gst() {
+    total_gst = $('div[id=room_reservation] fieldset:not([style*="display: none"]) input[id*=_destroy][id*=<%= @field_name %>_room_lists_attributes][id*=stay_lists_attributes][value=false]').length;
+    replace();
+  }
+  
   $(function() {
-    
-    total_gst = $("input[id*=_destroy][id*=<%= @field_name %>_room_lists_attributes][id*=stay_lists_attributes][value=false]").length;
+    get_total_gst();
     replace();
     $(":submit").click(function(){
       chk = false;
@@ -410,6 +415,7 @@
     $(link).prev("input[type=hidden]").val("1");
     $(link).closest("fieldset").hide();
     update_seq();
+    get_total_gst();
   }
   
 </script>

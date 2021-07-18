@@ -68,7 +68,7 @@
   </div>
 <% end %>
 <%= content_for :js_footer do %>
-<script type="application/x-javascript">
+<script>
   var total_gst = 0;
   <% if !@input_type.new_record? %>
     total_gst = <%= begin StayList.count( conditions: {room_list_id: @input_type.room_lists.collect{|u| u.id}}) rescue 0 end %>;

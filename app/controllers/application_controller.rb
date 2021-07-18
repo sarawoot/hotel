@@ -89,7 +89,7 @@ class ApplicationController < ActionController::Base
   
   def dateform_date(dt)
     dt = dt.split("/")
-    Time.new(dt[2].to_i, dt[1].to_i, dt[0].to_i)
+    "#{dt[2]}-#{dt[1]}-#{dt[0]}"
   rescue
     ""
   end

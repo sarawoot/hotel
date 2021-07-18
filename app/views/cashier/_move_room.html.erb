@@ -71,7 +71,7 @@
 
 <% input_tmp = InputType.find(params[:input_type_id]) %>
 <%= content_for :js_footer do %>
-<script type="application/x-javascript">
+<script>
   function sel2_room_move(){
     $("#move_room_new_id").select2({
       placeholder: "<%= "#{t("html.select")} #{t("html.room_no")}" %>",
