@@ -43,8 +43,8 @@ class ReportsController < ApplicationController
   
   def transaction_report
     if params[:search][:report_type].to_s != ""# 1=charge 2=payment
-      start_date = dateform_date(params[:search][:start_at]).to_i*1000
-      end_date = dateform_date(params[:search][:end_at]).to_i*1000
+      start_date = dateform_date(params[:search][:start_at])
+      end_date = dateform_date(params[:search][:end_at])
       url = case params[:search][:report_type].to_s
       when "1"
         url = "transaction_charge"
@@ -55,7 +55,7 @@ class ReportsController < ApplicationController
       end
       if url != ""
         data = JasperReport.run_report({
-          report: "reports/hotel/#{url}",
+          report: "hotel/report/#{url}",
           format: "pdf",
           params: {
             start_date: start_date,
@@ -72,17 +72,136 @@ class ReportsController < ApplicationController
   
   def summary_transaction_report
     if params[:search][:report_type].to_s == '1'
-      start_date = dateform_date(params[:search][:start_at]).to_i*1000
-      end_date = dateform_date(params[:search][:end_at]).to_i*1000
-      url = "summary_transaction"
+      start_date = dateform_date(params[:search][:start_at])
+      end_date = dateform_date(params[:search][:end_at])
+      user_id = current_user.id
+      shift_id = params[:search][:shift_id]
+
+      sql = "
+      (
+        select
+          1 as seq,
+          print_at,
+          username,
+          shift_name,
+          product_place,
+          count(room_list_id) as room_list_id,
+          sum(amount) as  amount,
+          sum(payment) as payment ,
+          count(1) as vol
+        from (
+          select
+            now() as print_at,
+            (select fname||'  '||lname from users where users.id = #{user_id}) as username,
+            shifts.name as shift_name,
+            'Room Charge' as product_place,
+            expenses.room_list_id,
+            sum(expenses.price) as amount,
+            sum(0.00) as payment
+          from
+            expenses
+            left join products on products.id = expenses.product_id
+            left join product_places on product_places.id = products.product_place_id
+            left join shifts on shifts.id = expenses.shift_id
+          where
+            products.config in ('1','2','3') and
+            expenses.at_date between '#{start_date}' and '#{end_date}' and
+            expenses.shift_id = #{shift_id}
+          group by
+            shift_name,
+            product_place,
+            expenses.room_list_id,
+            print_at,
+            username
+          order by
+            shift_name
+        ) as tb1
+        group by
+          shift_name,
+          product_place,
+          print_at,
+          username
+      )
+      union
+      (
+          select
+            2 as seq,
+            now() as print_at,
+            (select fname||'  '||lname from users where users.id = #{user_id}) as username,
+            shifts.name as shift_name,
+            product_places.name as product_place,
+            count(room_list_id) as room_list_id,
+            sum(expenses.price) as amount,
+            sum(0.00) as payment,
+            sum(vol) as vol
+          from
+            expenses
+            left join products on products.id = expenses.product_id
+            left join product_places on product_places.id = products.product_place_id
+            left join shifts on shifts.id = expenses.shift_id
+          where
+            products.config not in ('1','2','3', '4')  and
+            expenses.at_date between '#{start_date}' and '#{end_date}' and
+            expenses.shift_id = #{shift_id}
+          group by
+            shift_name,
+            product_place,
+            print_at,
+            username
+          order by
+            shift_name
+      )
+      union
+      (
+          select
+            3 as seq,
+            now() as print_at,
+            (select fname||'  '||lname from users where users.id = #{user_id}) as username,
+            shifts.name as shift_name,
+            product_places.name as product_place,
+            count(room_list_id) as room_list_id,
+            sum(0.00) as amount,
+            sum(abs(expenses.price)) as payment,
+            sum(vol) as vol
+          from
+            expenses
+            left join products on products.id = expenses.product_id
+            left join product_places on product_places.id = products.product_place_id
+            left join shifts on shifts.id = expenses.shift_id
+          where
+            products.config = '4'  and
+            expenses.at_date between '#{start_date}' and '#{end_date}' and
+            expenses.shift_id = #{shift_id}
+          group by
+            shift_name,
+            product_place,
+            print_at,
+            username
+          order by
+            shift_name
+      ) order by shift_name,seq
+      "
+      SummaryTransaction.delete_all()
+      rs = Expense.find_by_sql(sql)
+      rs.each {|u|
+        SummaryTransaction.create({
+          seq: u.seq,
+          username: u.username,
+          shift_name: u.shift_name,
+          product_place: u.product_place,
+          room_list_id: u.room_list_id,
+          amount: u.amount,
+          payment: u.payment,
+          vol: u.vol,
+        })
+      }
+
       data = JasperReport.run_report({
-        report: "reports/hotel/#{url}",
+        report: "hotel/report/summary_transaction",
         format: "pdf",
         params: {
-          start_date: start_date,
-          end_date: end_date,
-          user_id: current_user.id,
-          shift_id: params[:search][:shift_id]
+          start_date: dateform_date(params[:search][:start_at]),
+          end_date: dateform_date(params[:search][:end_at]),
         }
       })     
       mime = Mime::Type.lookup_by_extension("pdf").to_s
@@ -92,8 +211,8 @@ class ReportsController < ApplicationController
   
   def guest_in_house
     if params[:search][:report_type].to_s != ""# 1=cashier 2=housekeeping
-      start_date = dateform_date(params[:search][:start_at]).to_i*1000
-      end_date = dateform_date(params[:search][:end_at]).to_i*1000
+      start_date = dateform_date(params[:search][:start_at])
+      end_date = dateform_date(params[:search][:end_at])
       url = case params[:search][:report_type].to_s
       when "1"
         url = "guest_in_house"
@@ -104,7 +223,7 @@ class ReportsController < ApplicationController
       end
       if url != ""
         data = JasperReport.run_report({
-          report: "reports/hotel/#{url}",
+          report: "hotel/report/#{url}",
           format: "pdf",
           params: {
             start_date: start_date,
@@ -328,10 +447,10 @@ class ReportsController < ApplicationController
       
       
       data = JasperReport.run_report({
-        report: "reports/hotel/out_standing",
+        report: "hotel/report/out_standing",
         format: "pdf",
         params: {
-          at_date: dateform_date(params[:search][:at_date]).to_i*1000,
+          at_date: dateform_date(params[:search][:at_date]),
           user_id: current_user.id
         }
       })     

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 36) do
+ActiveRecord::Schema.define(:version => 37) do
 
   create_table "agents", :force => true do |t|
     t.string   "name"
@@ -328,6 +328,19 @@ ActiveRecord::Schema.define(:version => 36) do
     t.integer  "hotel_src_id"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
+  end
+
+  create_table "summary_transactions", :force => true do |t|
+    t.integer  "seq"
+    t.string   "username"
+    t.string   "shift_name"
+    t.string   "product_place"
+    t.decimal  "room_list_id"
+    t.decimal  "amount"
+    t.decimal  "payment"
+    t.decimal  "vol"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "users", :force => true do |t|
