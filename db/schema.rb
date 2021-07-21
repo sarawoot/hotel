@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 37) do
+ActiveRecord::Schema.define(:version => 40) do
 
   create_table "agents", :force => true do |t|
     t.string   "name"
@@ -184,6 +184,13 @@ ActiveRecord::Schema.define(:version => 37) do
     t.datetime "updated_at",                                 :null => false
   end
 
+  create_table "night_audits", :force => true do |t|
+    t.date     "at_date"
+    t.string   "status"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "out_standings", :force => true do |t|
     t.string   "report"
     t.string   "room"
@@ -198,6 +205,7 @@ ActiveRecord::Schema.define(:version => 37) do
     t.decimal  "credit"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.date     "at_date"
   end
 
   create_table "product_places", :force => true do |t|
@@ -341,6 +349,17 @@ ActiveRecord::Schema.define(:version => 37) do
     t.decimal  "vol"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+  end
+
+  create_table "trial_balances", :force => true do |t|
+    t.integer  "seq"
+    t.string   "product_name"
+    t.integer  "products_id"
+    t.decimal  "debit"
+    t.decimal  "credit"
+    t.string   "username"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "users", :force => true do |t|

@@ -1,4 +1,8 @@
+require 'sidekiq/web'
+
 Hotel::Application.routes.draw do
+  mount Sidekiq::Web => "/sidekiq"
+  
   root :to => "home#index"
   resources :product_places
   resources :rsvt_statuses

@@ -49,3 +49,4 @@ gem 'bootstrap-datetime-picker-for-rails'
 gem 'select2-rails'
 gem 'rest-client'
 gem 'pry-rails', :group => :development
+gem 'sidekiq', '~> 4.2', '>= 4.2.10'

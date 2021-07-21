@@ -469,12 +469,75 @@ class ReportsController < ApplicationController
       return
     end
     if params[:report].to_s == "1"
+      at_date = dateform_date(params[:search][:at_date])
+      user_id = current_user.id
+      sql = "
+      (
+      select
+        1 as seq,
+        products.name as product_name,
+        products.id as products_id,
+        sum(expenses.price) as debit,
+        null as credit,
+        (select fname||'  '||lname from users where users.id = #{user_id}) as username,
+        now() as print_at
+      from
+        expenses
+        left join products on products.id = expenses.product_id
+      where
+        expenses.at_date = '#{at_date}' and
+        products.config != '4'
+      group by
+        product_name,
+        products_id,
+        username,
+        print_at
+      order by products_id
+      )
+      union
+      (
+      select
+        2 as seq,
+        products.name as product_name,
+        products.id as products_id,
+        null as debit,
+        abs(sum(expenses.price)) as credit,
+        (select fname||'  '||lname from users where users.id = #{user_id}) as username,
+        now() as print_at
+      from
+        expenses
+        left join products on products.id = expenses.product_id
+      where
+        expenses.at_date = '#{at_date}' and
+        products.config = '4'
+      group by
+        product_name,
+        products_id,
+        username,
+        print_at
+      order by products_id
+      )
+      order by seq
+      "
+
+      TrialBalance.delete_all()
+      rs = Expense.find_by_sql(sql)
+      rs.each {|u|
+        TrialBalance.create({
+          seq: u.seq,
+          product_name: u.product_name,
+          products_id: u.products_id,
+          debit: u.debit,
+          credit: u.credit,
+          username: u.username,
+        })
+      }
+
       data = JasperReport.run_report({
-        report: "reports/hotel/trial_balance",
+        report: "hotel/report/trial_balance",
         format: "pdf",
         params: {
-          at_date: dateform_date(params[:search][:at_date]).to_i*1000,
-          user_id: current_user.id
+          at_date: at_date,
         }
       })     
       mime = Mime::Type.lookup_by_extension("pdf").to_s
