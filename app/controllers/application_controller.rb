@@ -4,6 +4,7 @@
 class ApplicationController < ActionController::Base
   before_filter :login_required
   include ControllerAuthentication
+  include DateHelper
   protect_from_forgery
   helper_method :get_shift, :time_overlap, :date_dateform, :date_dateform_sh, :datetime_datetimeform
   
@@ -42,59 +43,7 @@ class ApplicationController < ActionController::Base
    end
    shift_id
   end
-    
-  def datetime_datesql(dt)
-    dt = dt.split(" ")
-    dt = dt[0].split("/")
-    "#{dt[2]}-#{dt[1]}-#{dt[0]}"
-  rescue
-    ""
-  end
-  
-  
-  def datetime_datetimesql(dt)
-    dt = dt.split(" ")
-    d = dt[0].split("/")
-    t = dt[1].split(":")
-    "#{d[2]}-#{d[1]}-#{d[0]} #{t[0]}:#{t[1]}"
-  rescue
-    ""
-  end
-  
-  
-  def date_dateform(dt)
-    "#{"%02d" % dt.day}/#{"%02d" % dt.mon}/#{dt.year}"
-  rescue
-    ""
-  end
-  
-  def date_dateform_sh(dt)
-    "#{"%02d" % dt.day}/#{"%02d" % dt.mon}/#{dt.year.to_s[2..3]}"
-  rescue
-    ""
-  end
-  
-  def datetime_datetimeform(dt)
-    "#{"%02d" % dt.day}/#{"%02d" % dt.mon}/#{dt.year} #{"%02d" % dt.hour}:#{"%02d" % dt.min}"
-  rescue
-    ""
-  end
-  
-  def date_datesql(dt)
-    dt = dt.split("/")
-    "#{dt[2]}-#{dt[1]}-#{dt[0]}"
-  rescue
-    ""
-  end
-  
-  def dateform_date(dt)
-    dt = dt.split("/")
-    "#{dt[2]}-#{dt[1]}-#{dt[0]}"
-  rescue
-    ""
-  end
- 
-  
+      
   def time_overlap(st,en,fst,fen)
     "
       (date(#{fst}) between '#{st}' and '#{en}' or
@@ -125,34 +74,4 @@ class ApplicationController < ActionController::Base
       ))
     "
   end
-  
-  
-  def share_payment(arr, money)
-    new_arr = []
-    money = money.round(2)
-    arr.each {|a|
-      a = a.round(2)
-      new_money = 0.0
-      if a < money or a == money
-        new_money = a
-      end
-      if a > money
-        new_money = money
-      end
-      money = money - new_money
-      new_arr.push([a.to_f,new_money])
-    }
-    if money != 0
-      new_money = (money / arr.length).round(2)
-      new_arr.each{|a|
-        a[1] += new_money
-      }
-    end
-    new_arr
-  rescue
-    []
-  end
-
-
-    
 end

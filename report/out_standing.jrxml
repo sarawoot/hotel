@@ -13,6 +13,8 @@
 	now() as print_at
 from
 	out_standings
+where
+	at_date = $P{at_date}
 order by
 	report, COALESCE(room::int,10000),id]]>
 	</queryString>

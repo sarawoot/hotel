@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>At date:</b>
+  <%= @night_audit.at_date %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%= @night_audit.status %>
+</p>
+
+
+<%= link_to 'Edit', edit_night_audit_path(@night_audit) %> |
+<%= link_to 'Back', night_audits_path %>

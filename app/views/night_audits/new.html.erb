@@ -1,0 +1,17 @@
+<div class="page-header">
+  <h3>Night Audits</h3>
+</div>
+
+<%= render 'form' %>
+
+<%= link_to 'Back', night_audits_path %>
+
+<%= content_for :js_footer do %>
+<script>
+    $(function(){
+        $('#night_audit_at_date').datepicker({
+            format: 'dd/mm/yyyy'
+        });
+    });
+</script>
+<% end %>

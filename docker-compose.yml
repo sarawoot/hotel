@@ -51,4 +51,46 @@ services:
       - ./jasperserver_import:/jasperserver-import
     depends_on:
       - postgres
-# REDIS_PROVIDER=redis://redis:6379/0
+
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapp
+    hostname: webapp
+    ports:
+      - "3000:3000"
+    restart: always
+    command: bundle exec rails s
+    environment:
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - jasperserver
+      - redis
+
+  sidekiq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sidekiq
+    hostname: sidekiq
+    restart: always
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    environment:
+      - REDIS_URL_SIDEKIQ=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+
+  nginx:
+    image: nginx:1.21-alpine
+    container_name: nginx
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - webapp

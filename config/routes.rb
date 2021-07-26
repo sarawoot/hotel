@@ -1,6 +1,9 @@
 require 'sidekiq/web'
 
 Hotel::Application.routes.draw do
+  resources :night_audits
+
+
   mount Sidekiq::Web => "/sidekiq"
   
   root :to => "home#index"

@@ -1,0 +1,61 @@
+<div class="page-header">
+  <h3>Night Audits</h3>
+</div>
+<div class="row">
+  <div class="span4 offset4 well" style="padding: 0;" >
+    <div style="margin: 20px;">
+      <form method="get" class="form-horizontal">
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.start_at")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_start_at" name="search[start_at]" value="<%= begin params[:search][:start_at] rescue "" end %>" autocomplete="off">            
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" style="width:90px;"><%= raw "#{t("html.end_at")}" %></label>
+          <div class="controls" style="margin-left: 100px;">            
+            <input type="text" id="search_end_at" name="search[end_at]" value="<%= begin params[:search][:end_at] rescue "" end %>" autocomplete="off">            
+          </div>
+        </div>
+        <div class="form-actions">
+          <%= button_tag "Search", class: "btn btn-primary", id: "submit_report" %>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<%= link_to 'Audit', new_night_audit_path({night_audit: {at_date: date_dateform(Time.now)}}), class: "btn btn-primary" %>
+<br>
+<br>
+<table class="table table-hover table-bordered table-striped">
+  <tr>
+    <th>At date</th>
+    <th>Status</th>
+    <% if is_admin? %><th></th><% end %>
+  </tr>
+
+<center><%= paginate @night_audits %></center>
+<% @night_audits.each do |night_audit| %>
+  <tr>
+    <td><%= night_audit.at_date %></td>
+    <td><%= night_audit.status %></td>
+    <% if is_admin? %> <td><%= link_to 'Destroy', night_audit, method: :delete, data: { confirm: 'Are you sure?' } %></td> <% end %>
+  </tr>
+<% end %>
+</table>
+
+<%= content_for :js_footer do %>
+<script>
+  $(function(){
+    $('#search_start_at').datepicker({
+      format: 'dd/mm/yyyy'
+    });
+    
+    $('#search_end_at').datepicker({
+      format: 'dd/mm/yyyy'
+    });
+  });
+</script>
+<% end %>

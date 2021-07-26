@@ -224,7 +224,7 @@ class CashierController < ApplicationController
     }
     
     data = JasperReport.run_report({
-      report: "reports/hotel/folio",
+      report: "hotel/report/folio",
       format: "pdf",
       params: {folio_id: params[:folio_id]}
     })
@@ -390,26 +390,15 @@ class CashierController < ApplicationController
   #
   ##################################################
   def edit_charge
-    
-    #if params[:echarge][:room_list_id].to_s == ""
-    #  if params[:echarge][:product_id].to_s != ""
-    #    pd_tmp = Product.find(params[:echarge][:product_id]).config
-    #    if pd_tmp != '4' # not payment
-    #      respond_to do |format|
-    #        format.json { render json: {success: false} }
-    #      end
-    #      return            
-    #    end
-    #  else
-    #    respond_to do |format|
-    #      format.json { render json: {success: false} }
-    #    end
-    #    return         
-    #  end
-    #end
-    
-    
     expense = Expense.find(params[:expense_id])
+
+    if OutStanding.where(at_date: expense.at_date).count > 0 
+      respond_to do |format|
+        format.json { render json: {success: false, msg: "Can't edit. This item has been audited"} }
+      end
+      return
+    end
+    
     if expense.update_attributes(params[:echarge])
       respond_to do |format|
         format.json { render json: {success: true} }
@@ -429,6 +418,13 @@ class CashierController < ApplicationController
   ##################################################  
   def delete_charge
     expense = Expense.find(params[:expense_id])
+    if OutStanding.where(at_date: expense.at_date).count > 0 
+      respond_to do |format|
+        format.json { render json: {success: false, msg: "Can't edit. This item has been audited"} }
+      end
+      return
+    end
+
     if expense.destroy
       respond_to do |format|
         format.json { render json: {success: true} }

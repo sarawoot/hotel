@@ -1,0 +1,11 @@
+<%= simple_form_for(@night_audit) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.text_field :at_date, autocomplete: 'off', value: begin params[:night_audit][:at_date] rescue "" end %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -181,7 +181,11 @@
             $("#folio").treegrid("reload");
           }
           else{
-            alert("<%= "#{t("html.please_do_again")}" %>");
+            if (data["msg"] != undefined) {
+              alert(data["msg"]);
+            } else {
+              alert("<%= "#{t("html.please_do_again")}" %>");
+            }
           }
         },
         dataType: 'json'

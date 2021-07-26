@@ -360,7 +360,4 @@ module ApplicationHelper
   rescue
     []
   end
-    
-  
-
 end

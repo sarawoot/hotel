@@ -1,0 +1,2 @@
+module NightAuditsHelper
+end
