@@ -71,10 +71,10 @@
                                 <li><%= link_to "Transaction Report", transaction_report_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) })%></li>
                                 <li><%= link_to "Trial Balance Report", report_trial_balance_path(search: {at_date: date_dateform(Time.now) })%></li>
                                 <li><%= link_to "Guest in House", guest_in_house_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) })%></li>
+                                <li><%= link_to raw("#{t("html.gst_his")}"), gst_his_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) })%></li>
                                 
                                 <!--
                                 <<li><%= link_to raw("#{t("html.reservation_forecast")}"), rsvt_forecast_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) })%></li>
-                                <li><%= link_to raw("#{t("html.gst_his")}"), gst_his_path(search: {start_at: date_dateform(Time.now),end_at: date_dateform(Time.now) })%></li>
                                 <li><%= link_to "#{t("html.move_room")}", report_move_room_path(search: {start_date: date_dateform(Time.now), end_date: date_dateform(Time.now) })%></li>
                                 <li><%= link_to "#{t("html.check_out")}", report_check_out_path(search: {start_date: date_dateform(Time.now), end_date: date_dateform(Time.now) })%></li>
                                 -->
