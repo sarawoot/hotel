@@ -7,5 +7,8 @@ compose_down:
 compose_ps:
 	docker-compose -f ./docker-compose.yml ps
 
+compose_build:
+	docker-compose build --no-cache
+
 db_up:
 	bundle exec rake db:migrate RAILS_ENV=development
