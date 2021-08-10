@@ -16,7 +16,7 @@
 	room_lists.arvl_at,
 	room_lists.dpt_at,
 	input_types.remark,
-	now() as print_at,
+	now() + interval '7 hours' as print_at,
 	(select fname||'  '||lname from users where users.id = $P{user_id}) as username,
 	floors.name as floor
 from

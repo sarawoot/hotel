@@ -23,7 +23,7 @@
 	product_places.name as product_place,
 	expenses.created_at as at_time,
 	fname as by_user,
-	now() as print_at,
+	now() + interval '7 hours' as print_at,
 	(select fname||'  '||lname from users where users.id = $P{user_id}) as username,
 	shifts.name as shift_name
 from

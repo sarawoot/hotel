@@ -20,7 +20,7 @@
 	(select count(*) from stay_lists where stay_lists.room_list_id = room_lists.id and stay_lists.status in ('1','0') and stay_lists.abf_rate::int != 0) as adult,
 	agents.name as agent_name,
 	(select fname||'  '||lname from users where users.id = $P{user_id}) as username,
-	now() as print_at
+	now() + interval '7 hours' as print_at
 from
 	room_lists
 	left join rooms on rooms.id = room_lists.room_id

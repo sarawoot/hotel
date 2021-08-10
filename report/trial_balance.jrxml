@@ -8,7 +8,7 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select seq, product_name, products_id, debit, credit, username, now() as print_at from trial_balances]]>
+		<![CDATA[select seq, product_name, products_id, debit, credit, username, now() + interval '7 hours' as print_at from trial_balances]]>
 	</queryString>
 	<field name="seq" class="java.lang.Integer"/>
 	<field name="product_name" class="java.lang.String"/>

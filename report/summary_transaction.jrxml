@@ -15,7 +15,7 @@
 	<queryString>
 		<![CDATA[select 
     seq as id,
-    now() as print_at,
+    now() + interval '7 hours' as print_at,
     username,
     shift_name,
     product_place,

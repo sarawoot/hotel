@@ -21,7 +21,7 @@
 	COALESCE(credit,0) as credit,
 	ref,
 	username,
-	now() as print_at,
+	now() + interval '7 hours' as print_at,
 	1 as cnt
 from
 	folio_tmps

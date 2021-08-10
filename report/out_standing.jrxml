@@ -10,7 +10,7 @@
 	*,
 	(folio - credit) as balance,
 	(select fname||'  '||lname from users where users.id = $P{user_id}) as username,
-	now() as print_at
+	now() + interval '7 hours' as print_at
 from
 	out_standings
 where
