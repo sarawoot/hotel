@@ -49,5 +49,5 @@ gem 'html5shiv-rails'
 gem 'bootstrap-datetime-picker-for-rails'
 gem 'rest-client'
 gem 'pry-rails', :group => :development
-gem 'sidekiq', '~> 4.2', '>= 4.2.10'
+gem 'sidekiq', '~> 5.2'
 gem 'test-unit', '~> 3.0'
